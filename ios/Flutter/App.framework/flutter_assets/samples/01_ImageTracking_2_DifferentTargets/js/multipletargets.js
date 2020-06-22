@@ -68,7 +68,12 @@ var World = {
                     World.updateDistanceToTarget(distance / 10);
                 }*/
                 target.onRotationChanged = function(rotation, destinationTarget) {
+                   AR.platform.sendJSONObject({
+                        action: "get_data",
+                        data: rotation.z,
+                    });
                     World.updateDistanceToTarget(rotation.z);
+
                 }
 
 
@@ -109,6 +114,11 @@ var World = {
             },
             onImageRecognized: World.hideInfoBar,
             onError: World.onError
+        });
+    },
+    captureScreen: function captureScreenFn() {
+        AR.platform.sendJSONObject({
+            action: "get_data"
         });
     },
 

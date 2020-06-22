@@ -14,6 +14,9 @@
                 }
             },
             {
+                "required_extensions": [
+                    "data_transfer"
+                ],
                 "name": "Different Targets",
                 "path": "01_ImageTracking_2_DifferentTargets/index.html",
                 "requiredFeatures": [

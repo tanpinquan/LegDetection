@@ -35,6 +35,7 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    print("init");
 
     architectWidget = new ArchitectWidget(
       onArchitectWidgetCreated: onArchitectWidgetCreated,
@@ -98,7 +99,8 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
     
     if(sample.requiredExtensions != null && (sample.requiredExtensions.contains("screenshot") ||
         sample.requiredExtensions.contains("save_load_instant_target") ||
-        sample.requiredExtensions.contains("native_detail"))) {
+        sample.requiredExtensions.contains("native_detail")||
+        sample.requiredExtensions.contains("data_transfer"))) {
       this.architectWidget.setJSONObjectReceivedCallback(onJSONObjectReceived);
     }
   }
@@ -106,7 +108,12 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
   Future<void> onJSONObjectReceived(Map<String, dynamic> jsonObject) async {
     if(jsonObject["action"] != null){
       switch(jsonObject["action"]) {
+        case "get_data":
+          print("json test");
+          print(jsonObject["data"]);
+          break;
         case "capture_screen":
+          print("capture_screen");
           captureScreen();
           break;
         case "present_poi_details":
