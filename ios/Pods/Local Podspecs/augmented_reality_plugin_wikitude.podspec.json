@@ -1,0 +1,27 @@
+{
+  "name": "augmented_reality_plugin_wikitude",
+  "version": "0.0.1",
+  "summary": "The Wikitude plugin to create augmented reality experiences in your apps.",
+  "description": "The Wikitude plugin to create augmented reality experiences in your apps.",
+  "homepage": "https://www.wikitude.com/",
+  "license": {
+    "file": "../LICENSE.md"
+  },
+  "authors": {
+    "Wikitude": "flutter@example.com"
+  },
+  "source": {
+    "path": "."
+  },
+  "source_files": "Classes/**/*",
+  "public_header_files": "Classes/**/*.h",
+  "dependencies": {
+    "Flutter": [
+
+    ]
+  },
+  "vendored_frameworks": "Frameworks/WikitudeSDK.framework",
+  "platforms": {
+    "ios": "11.0"
+  }
+}
