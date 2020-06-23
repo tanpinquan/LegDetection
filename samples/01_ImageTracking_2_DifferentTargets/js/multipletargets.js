@@ -12,7 +12,7 @@ var World = {
             Each target in the target collection is identified by its target name. By using this
             target name, it is possible to create an AR.ImageTrackable for every target in the target collection.
          */
-        this.targetCollectionResource = new AR.TargetCollectionResource("assets/tracker.wtc", {
+        this.targetCollectionResource = new AR.TargetCollectionResource("assets/tracker_leg.wtc", {
             onError: World.onError
         });
 
@@ -51,49 +51,6 @@ var World = {
             }
         });
 
-        /*
-            This combines everything by creating an AR.ImageTrackable with the previously created tracker,
-            the name of the image target and the drawable that should augment the recognized image.
-
-            Important: If you replace the tracker file with your own, make sure to change the target name accordingly.
-            Use a specific target name to respond only to a certain target or use a wildcard to respond to any or a
-            certain group of targets.
-        */
-        this.pageOne = new AR.ImageTrackable(this.tracker, "zurich", {
-            drawables: {
-                cam: overlayOne
-            },
-            onImageRecognized: function(target) {
-                /*target.onDistanceChanged = function(distance) {
-                    World.updateDistanceToTarget(distance / 10);
-                }*/
-                target.onRotationChanged = function(rotation, destinationTarget) {
-                   AR.platform.sendJSONObject({
-                        action: "get_data",
-                        data: rotation.z,
-                    });
-                    World.updateDistanceToTarget(rotation.z);
-
-                }
-
-
-                World.hideInfoBar();
-
-            },
-
-            //onImageRecognized: World.hideInfoBar,
-            onError: World.onError,
-            distanceToTarget: {
-                changedThreshold: 1,
-                onDistanceChanged: function(distance) {
-                    //World.updateDistanceToTarget(distance / 10);
-                }
-            }
-        });
-
-        /*
-            Similar to the first part, the image resource and the AR.ImageDrawable for the second overlay are created.
-        */
         var imgTwo = new AR.ImageResource("assets/imageTwo.png", {
             onError: World.onError
         });
@@ -105,16 +62,70 @@ var World = {
         });
 
         /*
+            This combines everything by creating an AR.ImageTrackable with the previously created tracker,
+            the name of the image target and the drawable that should augment the recognized image.
+
+            Important: If you replace the tracker file with your own, make sure to change the target name accordingly.
+            Use a specific target name to respond only to a certain target or use a wildcard to respond to any or a
+            certain group of targets.
+        */
+        this.pageOne = new AR.ImageTrackable(this.tracker, "*", {
+            drawables: {
+                cam: overlayOne
+            },
+            onImageRecognized: function(target) {
+
+                AR.platform.sendJSONObject({
+                    action: "get_data",
+                    name: target.name
+                });
+
+                if(target.name === "image_knee"){
+
+                    target.onRotationChanged = function(rotation, destinationTarget) {
+                        var translation = target.getTranslationTo(destinationTarget);
+                        //if(target.name.localeCompare("image_knee")){
+                            AR.platform.sendJSONObject({
+                                action: "get_data",
+                                name: destinationTarget.name,
+                                data: [rotation.x, rotation.y, rotation.z, translation.x, translation.y, translation.z]
+                            });
+                            World.updateDistanceToTarget(rotation.z);
+
+                        //}
+
+
+                    }
+                }
+
+
+                World.hideInfoBar();
+
+            },
+
+            onError: World.onError,
+
+        });
+
+        /*
+            Similar to the first part, the image resource and the AR.ImageDrawable for the second overlay are created.
+        */
+
+
+        /*
             The AR.ImageTrackable for the second page uses the same tracker but with a different target name and the
             second overlay.
         */
-        this.pageTwo = new AR.ImageTrackable(this.tracker, "jats", {
+
+        /*
+        this.pageTwo = new AR.ImageTrackable(this.tracker, "jatz*", {
             drawables: {
                 cam: overlayTwo
             },
             onImageRecognized: World.hideInfoBar,
             onError: World.onError
         });
+        */
     },
     captureScreen: function captureScreenFn() {
         AR.platform.sendJSONObject({

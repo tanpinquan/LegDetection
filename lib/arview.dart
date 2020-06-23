@@ -109,8 +109,7 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
     if(jsonObject["action"] != null){
       switch(jsonObject["action"]) {
         case "get_data":
-          print("json test");
-          print(jsonObject["data"]);
+          print('${jsonObject["name"]}: ${jsonObject["data"]}');
           break;
         case "capture_screen":
           print("capture_screen");
