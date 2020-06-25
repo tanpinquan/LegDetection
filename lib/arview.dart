@@ -90,10 +90,28 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
               decoration: BoxDecoration(color: Colors.black),
               child: architectWidget
           ),
-          Text(displayString),
+          _displayText()
+
+
 
         ],
       ),
+    );
+  }
+
+  Widget _displayText(){
+    if(hipTrackingData.isEmpty){
+      return Container();
+    }
+
+    return Container(
+        color: Colors.white60,
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            Text(displayString, style: Theme.of(context).textTheme.headline3,),
+          ],
+        )
     );
   }
 
