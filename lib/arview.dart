@@ -17,7 +17,7 @@ import 'package:augmented_reality_plugin_wikitude/wikitude_response.dart';
 import 'package:wikitude_flutter_app/poiDetails.dart';
 
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'chart.dart';
+//import 'chart.dart';
 
 class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
   ArchitectWidget architectWidget;
@@ -30,7 +30,8 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
 
   List<double> angleList = [];
   List timeList = [];
-  List<charts.Series> seriesList = [];
+  List<TimeSeriesAngle> dataList = [];
+  List<charts.Series<TimeSeriesAngle, DateTime>> seriesList = [];
 
   ArViewState(Sample sample) {
     this.sample = sample;
@@ -97,13 +98,31 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
               decoration: BoxDecoration(color: Colors.black),
               child: architectWidget
           ),
-          SimpleTimeSeriesChart.withSampleData(),
-          _displayText()
+          Column(
+            children: <Widget>[
+              _displayText(),
+              Container(
+                height: 100,
+                child: _buildChart()
+              ),
+            ],
+          ),
 
 
 
         ],
       ),
+    );
+  }
+
+  Widget _buildChart(){
+    return charts.TimeSeriesChart(
+      seriesList,
+      animate: true,
+      // Optionally pass in a [DateTimeFactory] used by the chart. The factory
+      // should create the same type of [DateTime] as the data provided. If none
+      // specified, the default creates local date time.
+      dateTimeFactory: const charts.LocalDateTimeFactory(),
     );
   }
 
@@ -125,18 +144,36 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
 
   void updateDisplay(){
     print('${DateTime.now().minute}:${DateTime.now().second}:${DateTime.now().millisecond}: $trackedJoint: $hipTrackingData');
-    setState(() {
-      displayString = 'Knee Angle:  ${hipTrackingData[2]}';
+    displayString = 'Knee Angle:  ${hipTrackingData[2]}';
 
-    });
     angleList.add(hipTrackingData[2]);
     timeList.add(DateTime.now());
-//    final snackBar = SnackBar(
-//      content: Text('Knee Angle:  ${hipTrackingData[2]}'),
-//    );
-//    Scaffold.of(context).showSnackBar(snackBar);
+    dataList.add(TimeSeriesAngle(DateTime.now(), hipTrackingData[2]));
+//    final data = [
+//      new TimeSeriesSales(new DateTime(2017, 9, 19), 5),
+//      new TimeSeriesSales(new DateTime(2017, 9, 26), 25),
+//      new TimeSeriesSales(new DateTime(2017, 10, 3), 100),
+//      new TimeSeriesSales(new DateTime(2017, 10, 10), 75),
+//    ];
+
+    seriesList = [
+      charts.Series<TimeSeriesAngle, DateTime>(
+        id: 'Angle',
+        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+        domainFn: (TimeSeriesAngle angle, _) => angle.time,
+        measureFn: (TimeSeriesAngle angle, _) => angle.angle,
+        data: dataList,
+      )
+    ];
+
+    setState(() {
+
+    });
+
 
   }
+
+
 
   Future<void> onArchitectWidgetCreated() async {
     this.architectWidget.load(loadPath, onLoadSuccess, onLoadFailed);
