@@ -31,7 +31,9 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
   List<double> angleList = [];
   List timeList = [];
   List<TimeSeriesAngle> dataList = [];
-  List<charts.Series<TimeSeriesAngle, DateTime>> seriesList = [];
+  //List<charts.Series<TimeSeriesAngle, DateTime>> seriesList = [];
+  List<charts.Series<TimeSeriesAngle, double>> seriesList = [];
+  DateTime startTime;
 
   ArViewState(Sample sample) {
     this.sample = sample;
@@ -102,6 +104,7 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
             children: <Widget>[
               _displayText(),
               Container(
+                color: Colors.white60,
                 height: 100,
                 child: _buildChart()
               ),
@@ -116,13 +119,15 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
   }
 
   Widget _buildChart(){
-    return charts.TimeSeriesChart(
+    return charts.LineChart(
       seriesList,
-      animate: true,
-      // Optionally pass in a [DateTimeFactory] used by the chart. The factory
+      animate: false,
+      defaultRenderer: new charts.LineRendererConfig(includePoints: true)
+
+    // Optionally pass in a [DateTimeFactory] used by the chart. The factory
       // should create the same type of [DateTime] as the data provided. If none
       // specified, the default creates local date time.
-      dateTimeFactory: const charts.LocalDateTimeFactory(),
+      //dateTimeFactory: const charts.LocalDateTimeFactory(),
     );
   }
 
@@ -143,12 +148,22 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
   }
 
   void updateDisplay(){
+
     print('${DateTime.now().minute}:${DateTime.now().second}:${DateTime.now().millisecond}: $trackedJoint: $hipTrackingData');
     displayString = 'Knee Angle:  ${hipTrackingData[2]}';
+    double timeElapsed;
+    if(dataList.isEmpty){
+      startTime = DateTime.now();
+      timeElapsed = 0;
+    }else {
+      Duration duration = DateTime.now().difference(startTime);
+      timeElapsed = duration.inMilliseconds/1000;
+    }
+
 
     angleList.add(hipTrackingData[2]);
     timeList.add(DateTime.now());
-    dataList.add(TimeSeriesAngle(DateTime.now(), hipTrackingData[2]));
+    dataList.add(TimeSeriesAngle(timeElapsed, hipTrackingData[2]));
 //    final data = [
 //      new TimeSeriesSales(new DateTime(2017, 9, 19), 5),
 //      new TimeSeriesSales(new DateTime(2017, 9, 26), 25),
@@ -157,11 +172,12 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
 //    ];
 
     seriesList = [
-      charts.Series<TimeSeriesAngle, DateTime>(
+      charts.Series<TimeSeriesAngle, double>(
         id: 'Angle',
         colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
         domainFn: (TimeSeriesAngle angle, _) => angle.time,
         measureFn: (TimeSeriesAngle angle, _) => angle.angle,
+//        radiusPxFn: (TimeSeriesAngle angle, _) => 1,
         data: dataList,
       )
     ];
@@ -328,7 +344,7 @@ class ArViewWidget extends StatefulWidget {
 }
 
 class TimeSeriesAngle {
-  final DateTime time;
+  final double time;
   final double angle;
 
   TimeSeriesAngle(this.time, this.angle);

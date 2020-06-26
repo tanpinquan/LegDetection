@@ -50,7 +50,7 @@
 		</data>
 		<key>Frameworks/App.framework/App</key>
 		<data>
-		zBonai6ToMAnFlFaVZIrVM+tG0w=
+		Nh4yASS6K6oWyMh+Q+7Ac7Dzwlo=
 		</data>
 		<key>Frameworks/App.framework/Info.plist</key>
 		<data>
@@ -58,7 +58,7 @@
 		</data>
 		<key>Frameworks/App.framework/_CodeSignature/CodeResources</key>
 		<data>
-		iwZ+PglVH5PASlFJ+GBIrlI2Ol8=
+		YLaYRf/LKlb7R8YEt6rai5o+krA=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.json</key>
 		<data>
@@ -70,7 +70,7 @@
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/LICENSE</key>
 		<data>
-		NnIwutpIFBW20V1W69JlG1gFnSs=
+		THt/CbCaBLBmu5w7yq6OZELpYX8=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/fonts/MaterialIcons-Regular.ttf</key>
 		<data>
@@ -82,7 +82,7 @@
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/kernel_blob.bin</key>
 		<data>
-		fPanfixydg66BpqkHxHzJ3k9cAs=
+		nBDRmj/9XV49CbVJdjgAcw/R1r8=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
 		<data>
@@ -2998,7 +2998,7 @@
 		</data>
 		<key>Frameworks/Flutter.framework/Flutter</key>
 		<data>
-		IHPrRnie8s8ugevc3PLt8qUE4nA=
+		B3DR+PbfoZ2FKY5VekysKM001Ko=
 		</data>
 		<key>Frameworks/Flutter.framework/Info.plist</key>
 		<data>
@@ -3018,7 +3018,7 @@
 		</data>
 		<key>Frameworks/WikitudeSDK.framework/WikitudeSDK</key>
 		<data>
-		pNbR70R3zXVX9paVedh1dkBoBhI=
+		3S2m9IF6G9caUd20iJkmFfH5yFQ=
 		</data>
 		<key>Frameworks/WikitudeSDK.framework/_CodeSignature/CodeResources</key>
 		<data>
@@ -3128,7 +3128,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			d60nCFedyjvlbzwuqgPzNtKTwPHkZX12hxSIQtZecog=
+			BuHhlRGo5Py0wEKXu9San0CIAyjAw6YSytURQj5yX6s=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/Info.plist</key>
@@ -3142,7 +3142,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			IMQ+VAjFxNUHetlCsgVUEgwOC3piy5thIuhSwmyhX7Y=
+			FiIuzBc6Agco2WTY7M8e+8UWlUc/vndnzRp6WPseSwY=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.json</key>
@@ -3163,7 +3163,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			9jYrrOaNAVRSxJHVwBg8WId+0dGi7y0TYe6xL3NVuQk=
+			vuNyUwoNN9lkjISDSHULRniKED76wBwSVbfTbSbTNQM=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/fonts/MaterialIcons-Regular.ttf</key>
@@ -3184,7 +3184,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			8tFQbbA7JCNY+ExwMuBgpkh1la+KqIMULysTgSY6yV0=
+			0+sRocvjGBVAGQ9ikFlD+nnprOqiGbAB2bg9kwARtCI=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
@@ -8273,7 +8273,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			lGU2bIYTV51EDyA8yXKkd+WhSCZ+K9FBpwmlH76R1Z8=
+			MwXYF2XouaqacffPe6vd4EUQRBWkMpFEigLPrcj7TkY=
 			</data>
 		</dict>
 		<key>Frameworks/Flutter.framework/Info.plist</key>
@@ -8308,7 +8308,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			O1T6meYSGvOXZfWwuOXUj4BSw+4UHo+KLgOoJYuFH6M=
+			bgyQsNl+hcQ2DL24HCE2xFLdUrLO5Os3l+HNCS/RoiU=
 			</data>
 		</dict>
 		<key>Frameworks/WikitudeSDK.framework/_CodeSignature/CodeResources</key>
