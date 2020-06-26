@@ -16,6 +16,9 @@ import 'package:augmented_reality_plugin_wikitude/wikitude_plugin.dart';
 import 'package:augmented_reality_plugin_wikitude/wikitude_response.dart';
 import 'package:wikitude_flutter_app/poiDetails.dart';
 
+import 'package:charts_flutter/flutter.dart' as charts;
+import 'chart.dart';
+
 class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
   ArchitectWidget architectWidget;
   String wikitudeTrialLicenseKey = "rRcPFV/GWHOalFjHX9rP9TWGNRKVu8P4FSKvHtps1mo14SexXUmlVAebLNuKKr9OcOFD89RiMH03AY3eJL09d3Pbvb/V+AVYsQiBROkqqAhYe2lDojp++ZAPDx2RM9rJrD+1qYyUUbdUyKzIJXrU09u4tST9NdhER08njP2tMydTYWx0ZWRfX/p90uj/Yn9x/bcRTK6REaUg/GJT6uUKh7KfnXmxAtt0RI9WNjVPQFFjS1WFGtrRI43/VqyS0gnfsjmiov6fyrE+0aGBxJIzBNWupROE+AYw9LFkJ0gRN6KhsqvawIobvSPbVH+OaYanwnIV8q34LyTRujMzvJL+ke0hEfucf6eChYWe3O5kGCRD09oDnBzBLYnZotRjtuDb2eiHksj28kNuHJTlWItLA4A5Xjri7I1FmnCnTYezZfS2EHHazgOwfYAx+RMTSDXkdjrfradWo4kQFlERljYr1fXTh0T9s19r9FJTeao5/4UbUqcAW8mu71LoIQ5i2gJLDEp4d7xBEBaSznQ2TI4DSNW13lGlTXx8Ma47sFk4uxcxNy1S56RC1bPXA/iJGudxQrGMlhrYuwYcbEpKqEAqRB3xCZKV0M/69hlcZTreu3+1LbtYpLBFQ9GGMPC5FMjzVt29UFSVFyChB6PJlfVrpXbyvlq7ZFKWPc77HKIUyVhx5cSuI19pMxoTPiK5FfcuD7NeUJISK2loWzM/Cd5kvjqCZf0mGJ4zs9iwAQrkhpBGr07lwyAKJ0wH4ybZIdFXb69uZHnp9YnibYF6cuq5L+66lNPRicm1ojF46Sc6SkiVeZDfS6J1f2UOL1ymEMi3eH7pc8+AQ5JUn7XJWr8xIcYTlBa4HkJkRV7ire2Daij3cNywrcVv1GuReHLyW+UipWGPKrvY8IONHmkLEuAgdU9WupbmVdt24Cjn2s1n/ecIIKIVm9xgvdd5n4DHXKsOOWY03gp43g/5jgTJdl1PNwaVIvnwC1zMchAL5Ld49im8pcZbYiQC/MQqAdixxpORPZ0i6j0TM86K7P6DgSxmMNP/SG4vDx0m9mxvCIzvyevNl69Rc2yRToAwY1yGHMHyT2LwWr1NDhhW620ALR/u8gycvRhICYmISCwuCEBuSK+2UyKuKHk50gCr+xfLenxYshOJC+3dyGgBKXMkh/T8i0vKIBaKX5LcD0BY+msO4h/vrb4dMB61qzxCuJM8ax6O5tuQc4u5WOi/6XrAIRFTCqLMST8U6JKN689s70FJtvQYm0DpbPfYTOfeA53B5fphfsTMQqXFwKPhVLczCoWftmlLhHb/NcmNmCHnTp/Mm9yObyNsiG3oQ1Wbb1a9eMOcJ5y/Wvpi0RSYGwIfJcIIknvJIwPphZ3AJ3K9x/M89kct/J65XZMAMdnM1FbtLRpgKUVAUIUJ/E6V03QP/ElUHHukYjbXABWs/fJ/6uy9E4aXjbmzJQ6I9VKQ1uUsT2Oh8585HoXp6LLiFxADdRSIllJBtuMCmgfrd06qQ/q9wu8xFzvJYBeIT6xlCbsBXgdm";
@@ -24,6 +27,10 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
   List hipTrackingData = [];
   String trackedJoint = "";
   String displayString = "No detections";
+
+  List<double> angleList = [];
+  List timeList = [];
+  List<charts.Series> seriesList = [];
 
   ArViewState(Sample sample) {
     this.sample = sample;
@@ -90,6 +97,7 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
               decoration: BoxDecoration(color: Colors.black),
               child: architectWidget
           ),
+          SimpleTimeSeriesChart.withSampleData(),
           _displayText()
 
 
@@ -115,12 +123,14 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
     );
   }
 
-  void displaySnackbar(){
-    print('$trackedJoint: $hipTrackingData');
+  void updateDisplay(){
+    print('${DateTime.now().minute}:${DateTime.now().second}:${DateTime.now().millisecond}: $trackedJoint: $hipTrackingData');
     setState(() {
       displayString = 'Knee Angle:  ${hipTrackingData[2]}';
 
     });
+    angleList.add(hipTrackingData[2]);
+    timeList.add(DateTime.now());
 //    final snackBar = SnackBar(
 //      content: Text('Knee Angle:  ${hipTrackingData[2]}'),
 //    );
@@ -152,7 +162,7 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
         case "get_data":
           hipTrackingData = jsonObject["data"];
           trackedJoint = jsonObject["name"];
-          displaySnackbar();
+          updateDisplay();
 //          final snackBar = SnackBar(
 //            content: Text('Knee Angle:  ${hipTrackingData[2]}'),
 //          );
@@ -278,4 +288,11 @@ class ArViewWidget extends StatefulWidget {
 
   @override
   ArViewState createState() => new ArViewState(sample);
+}
+
+class TimeSeriesAngle {
+  final DateTime time;
+  final double angle;
+
+  TimeSeriesAngle(this.time, this.angle);
 }

@@ -98,6 +98,18 @@
       "languageVersion": "2.0"
     },
     {
+      "name": "charts_common",
+      "rootUri": "file:///Users/pinquan/Development/flutter/.pub-cache/hosted/pub.dartlang.org/charts_common-0.9.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.3"
+    },
+    {
+      "name": "charts_flutter",
+      "rootUri": "file:///Users/pinquan/Development/flutter/.pub-cache/hosted/pub.dartlang.org/charts_flutter-0.9.0",
+      "packageUri": "lib/",
+      "languageVersion": "1.23"
+    },
+    {
       "name": "checked_yaml",
       "rootUri": "file:///Users/pinquan/Development/flutter/.pub-cache/hosted/pub.dartlang.org/checked_yaml-1.0.2",
       "packageUri": "lib/",
@@ -204,6 +216,12 @@
       "rootUri": "file:///Users/pinquan/Development/flutter/.pub-cache/hosted/pub.dartlang.org/image-2.1.12",
       "packageUri": "lib/",
       "languageVersion": "2.0"
+    },
+    {
+      "name": "intl",
+      "rootUri": "file:///Users/pinquan/Development/flutter/.pub-cache/hosted/pub.dartlang.org/intl-0.16.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.5"
     },
     {
       "name": "io",
@@ -464,7 +482,7 @@
       "languageVersion": "2.1"
     }
   ],
-  "generated": "2020-06-22T00:57:29.590517Z",
+  "generated": "2020-06-26T01:35:34.674643Z",
   "generator": "pub",
   "generatorVersion": "2.8.2"
 }
