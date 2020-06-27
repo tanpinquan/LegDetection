@@ -50,7 +50,7 @@
 		</data>
 		<key>Frameworks/App.framework/App</key>
 		<data>
-		di3lOACtmdP6qgZFjAWRGlO5rSo=
+		pJoRehwWmmeUA+mjHNnYx1kM6Ts=
 		</data>
 		<key>Frameworks/App.framework/Info.plist</key>
 		<data>
@@ -58,7 +58,7 @@
 		</data>
 		<key>Frameworks/App.framework/_CodeSignature/CodeResources</key>
 		<data>
-		i27ZBpxuTwSB0JqWO4Y2j9R4CkE=
+		mCHhIBPpkto1/g+fEA7hSB1OyL0=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.json</key>
 		<data>
@@ -82,7 +82,7 @@
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/kernel_blob.bin</key>
 		<data>
-		6B36mj708jwZfH2+lBpPCtXpH8w=
+		cu1HZNay2o23AQJ7r7c5mj7vUpw=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
 		<data>
@@ -3002,7 +3002,7 @@
 		</data>
 		<key>Frameworks/Flutter.framework/Flutter</key>
 		<data>
-		VlRmzmkayaSnUOMIo5Sa8CqQ7kY=
+		XmSyjFoke5yJGcaqzxKBozBPq9Q=
 		</data>
 		<key>Frameworks/Flutter.framework/Info.plist</key>
 		<data>
@@ -3022,7 +3022,7 @@
 		</data>
 		<key>Frameworks/WikitudeSDK.framework/WikitudeSDK</key>
 		<data>
-		3XYCmHzechVtgosqIxN+OXh6DsM=
+		gX1+qKi8yWFYyZEvtq3swB92ALk=
 		</data>
 		<key>Frameworks/WikitudeSDK.framework/_CodeSignature/CodeResources</key>
 		<data>
@@ -3132,7 +3132,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			rivX1Uok1Dd4OvWTaeX/Qagxxv1mbJe8NjRv20ChyHs=
+			tLaASjXtv/Ri334opRgbuRq6HREPgPfRb1nAvujBbnI=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/Info.plist</key>
@@ -3146,7 +3146,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			68M3op/W9dKmJqsnHuX8U4PR+HktXKEE1fIBYXV0ch8=
+			vg98e1HyLz2sslL0/08d7VJczkpim8Vg4hTQNLNGZSk=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.json</key>
@@ -3188,7 +3188,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			p28vgFwtaXhL4LP/Ej6YRWZRSe0XxpNvnxBL3rc7kCs=
+			se2XHhop9hstLrYOTGSCnxukzRdwjoH7+X6QLvIDaFk=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
@@ -8284,7 +8284,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			zE9Vh7sTHChtZbF/5ombD7GkV4WK5i60M3W/6BAXBVk=
+			sTFbRMvF2S+NBaQWqD2omxwXsNW50C3Aul03A+SOOkA=
 			</data>
 		</dict>
 		<key>Frameworks/Flutter.framework/Info.plist</key>
@@ -8319,7 +8319,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			NSyh/uGd1OaMxbEAC8CguCdND+dbidAIfZA7Du4G+Js=
+			DluP/ib5o9OmjPhBUMdkLnJNIjeWQz+cQF54CQ6BNG8=
 			</data>
 		</dict>
 		<key>Frameworks/WikitudeSDK.framework/_CodeSignature/CodeResources</key>

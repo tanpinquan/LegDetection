@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:augmented_reality_plugin_wikitude/startupConfiguration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:wikitude_flutter_app/plotView.dart';
 //import 'package:wikitude_flutter_app/customUrl.dart';
 
 import 'arview.dart';
@@ -13,6 +14,12 @@ import 'sample.dart';
 import 'package:augmented_reality_plugin_wikitude/wikitude_plugin.dart';
 import 'package:augmented_reality_plugin_wikitude/wikitude_sdk_build_information.dart';
 import 'package:augmented_reality_plugin_wikitude/wikitude_response.dart';
+
+import 'package:path_provider/path_provider.dart';
+//import 'package:path/path.dart';
+import 'dart:io';
+import 'package:path/path.dart' as path;
+
 
 void main() => runApp(MyApp());
 
@@ -47,18 +54,10 @@ Future _loadSamples() async{
 
 class MyApp extends StatelessWidget {
 
-  Sample config = Sample(
-    name: 'Track Leg',
-    requiredExtensions: ["data_transfer"],
-    requiredFeatures: ["image_tracking"],
-    path: "01_ImageTracking_2_DifferentTargets/index.html",
-    startupConfiguration: StartupConfiguration(
-        cameraPosition: CameraPosition.FRONT,
-        cameraResolution: CameraResolution.AUTO
-    )
 
 
-  );
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -68,9 +67,9 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       theme: ThemeData(
-        primaryColor: Color(0xffffb300),
-        primaryColorDark: Color(0xfffb8c00),
-        accentColor: Color(0xffffb300)
+//        primaryColor: Color(0xffffb300),
+//        primaryColorDark: Color(0xfffb8c00),
+//        accentColor: Color(0xffffb300)
       ),
       home: MainMenu()
     );
@@ -85,158 +84,93 @@ class MainMenu extends StatefulWidget {
 
 
 class MyAppState extends State<MainMenu> {
+  Sample arConfig = Sample(
+      name: 'Track Leg',
+      requiredExtensions: ["data_transfer"],
+      requiredFeatures: ["image_tracking"],
+      path: "01_ImageTracking_2_DifferentTargets/index.html",
+      startupConfiguration: StartupConfiguration(
+          cameraPosition: CameraPosition.FRONT,
+          cameraResolution: CameraResolution.AUTO
+      )
 
 
+  );
+  List<FileSystemEntity> files = new List();
 
 
   @override
+  void initState() {
+    super.initState();
+    getFiles();
+
+  }
+
+  void getFiles()async{
+    final directory = (await getApplicationDocumentsDirectory()).path;
+    print(directory);
+
+    files = Directory("$directory").listSync();  //use your folder name insted of resume.
+    print(files);
+
+    print(path.basename(files[0].path));
+    print('init');
+
+    setState(() {
+
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Flutter Examples'),
-        actions: <Widget>[
-          PopupMenuButton<String>(
-            onSelected: popupMenuSelectedItem,
-            itemBuilder: (BuildContext context) {
-              return PopupMenuItems.items.map((String item) {
-                return PopupMenuItem<String> (
-                  value: item,
-                  child: Text(item)
-                );
-              }).toList();
+
+    List<Widget> widgetList = [];
+
+    widgetList.addAll([
+      ListTile(
+          title: Text('Track Exercise'),
+          trailing: Icon(Icons.arrow_forward_ios),
+          onTap: (){
+            _pushArView(arConfig);
+          }
+      ),
+      Divider(height: 0,),
+      Container(height: 50,),
+      Divider(height: 0,),
+    ]);
+    
+    files.forEach((file) {
+      String fileName = path.basename(file.path);
+      widgetList.add(
+          ListTile(
+            title: Text(fileName),
+            onTap: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => PlotView(fileName:fileName)),
+              );
             },
           )
-        ],
+      );
+    });
+    
+    
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Leg Tacking'),
       ),
-      body: Container(
-        decoration: BoxDecoration(color: Color(0xffdddddd)),
-        child: Padding(
-          padding: EdgeInsets.only(left: 10.0, right: 10.0),
-          child: FutureBuilder(
-            future: _loadSamples(),
-            builder: (context, snapshot) {
-              if(snapshot.hasData) {
-                return Container(
-                  decoration: BoxDecoration(color: Colors.white),
-                  child: CategoryExpansionTile(
-                    categories: snapshot.data,
-                  ),
-                );
-              } else {
-                return Center(child: CircularProgressIndicator());
-              }
-            },
-          ),
-        )
-      )
+      body: ListView(
+        children: widgetList
+      ),
+
+
     );
   }
 
-  void popupMenuSelectedItem(String item) {
-    switch(item) {
-      case PopupMenuItems.sdkBuildInformation:
-        _getSDKInfo();
-        break;
-    }
-  }
 
-  Future<void> _getSDKInfo() async {
-    String sdkVersion = await WikitudePlugin.getSDKVersion();
-    WikitudeSDKBuildInformation sdkBuildInformation = await WikitudePlugin.getSDKBuildInformation();
 
-    String message = "Build configuration: ${sdkBuildInformation.buildConfiguration}\nBuild date: ${sdkBuildInformation.buildDate}\nBuild number: ${sdkBuildInformation.buildNumber}\nBuild version: $sdkVersion";
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("SDK information"),
-          content: Text(message),
-          actions: <Widget>[
-            FlatButton(
-              child: Text("Ok"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      }
-    );
-  }
 
-//  @override
-//  void initState() {
-//    super.initState();
-//    print('init2');
-//    _loadJSInfo();
-//  }
-}
-
-class CategoryExpansionTile extends StatefulWidget {
-  final List<Category> categories;
-  CategoryExpansionTile({
-    Key key,
-    this.categories,
-  }) : super(key: key);
-
-  @override
-  CategoryExpansionTileState createState() => new CategoryExpansionTileState();
-}
-
-class CategoryExpansionTileState extends State<CategoryExpansionTile> {
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: widget.categories.length,
-      itemBuilder: (context, index){
-        return CustomExpansionTile(
-          key: PageStorageKey("$index"),
-          title: Text(
-            "${widget.categories[index].categoryName}",
-            style: TextStyle(color: Colors.black),
-          ),
-          headerBackgroundColor: Colors.white,
-          headerBackgroundColorAccent: Color(0xffffb300),
-          headerContentPadding: EdgeInsets.fromLTRB(15, 2, 15, 2),
-          borderColor: Theme.of(context).dividerColor,
-          iconColor: Colors.grey,
-          children: createSamplesTileList(widget.categories[index].samples),
-        );
-      }
-    );
-  }
-
-  List<Widget> createSamplesTileList(List<Sample> samples) {
-    List<Widget> tileList = new List();
-
-    for(int i = 0; i < samples.length; i++) {
-      Sample sample = samples[i];
-      List<String> features = new List();
-      for(int j = 0; j < sample.requiredFeatures.length; j++) {
-        features.add(sample.requiredFeatures[j]);
-      }
-      
-      tileList.add(FutureBuilder(
-        future: _isDeviceSupporting(features),
-        builder: (context, snapshot) {
-          if(snapshot.hasData) {
-            return Container(
-              decoration: BoxDecoration(color: snapshot.data.success ? Colors.white : Colors.grey),
-              child: ListTile(
-                title: Text(sample.name),
-                onTap: () => snapshot.data.success ? _pushArView(sample) : _showDialog("Device missing features", snapshot.data.message),
-              )
-            );
-          } else {
-            return Center(child: CircularProgressIndicator());
-          }
-        }
-      ));
-    }
-
-    return tileList;
-  }
 
   Future<WikitudeResponse> _isDeviceSupporting(List<String> features) async {
     return await WikitudePlugin.isDeviceSupporting(features);
@@ -247,70 +181,73 @@ class CategoryExpansionTileState extends State<CategoryExpansionTile> {
   }
 
   Future<void> _pushArView(Sample sample) async {
-    WikitudeResponse permissionsResponse = await _requestARPermissions(sample.requiredFeatures);
-    if(permissionsResponse.success) {
-       Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => ArViewWidget(sample: sample)),
-      );
-    } else {
-      _showPermissionError(permissionsResponse.message);
+    WikitudeResponse supportedResponse = await _isDeviceSupporting(sample.requiredFeatures);
+
+    if(supportedResponse.success) {
+      WikitudeResponse permissionsResponse = await _requestARPermissions(
+          sample.requiredFeatures);
+      if (permissionsResponse.success) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ArViewWidget(sample: sample)),
+        );
+      } else {
+        _showPermissionError(permissionsResponse.message);
+      }
+    }else{
+      _showNotSupportedError(supportedResponse.message);
     }
   }
 
-  void _showDialog(String title, String message) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(title),
-          content: Text(message),
-          actions: <Widget>[
-            FlatButton(
-              child: Text("Ok"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      }
-    );
-  }
 
   void _showPermissionError(String message) {
     showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Permissions required"),
-          content: Text(message),
-          actions: <Widget>[
-            FlatButton(
-              child: const Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            FlatButton(
-              child: const Text('Open settings'),
-              onPressed: () {
-                Navigator.of(context).pop();
-                WikitudePlugin.openAppSettings();
-              },
-            )
-          ],
-        );
-      }
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Permissions required"),
+            content: Text(message),
+            actions: <Widget>[
+              FlatButton(
+                child: const Text('Cancel'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              FlatButton(
+                child: const Text('Open settings'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  WikitudePlugin.openAppSettings();
+                },
+              )
+            ],
+          );
+        }
     );
   }
+
+
+  void _showNotSupportedError(String message) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Device not supported"),
+            content: Text(message),
+            actions: <Widget>[
+              FlatButton(
+                child: const Text('Ok'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+
+            ],
+          );
+        }
+    );
+  }
+
 }
 
-class PopupMenuItems {
-  static const String customUrlLauncher = "Custom URL Launcher";
-  static const String sdkBuildInformation = "SDK Build Information";
-
-  static const List<String> items = <String> [
-    customUrlLauncher, sdkBuildInformation
-  ];
-}

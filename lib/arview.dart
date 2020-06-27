@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
+import 'package:wikitude_flutter_app/model/timeseries.dart';
 //import 'applicationModelPois.dart';
 //import 'poi.dart';
 
@@ -18,6 +19,8 @@ import 'package:augmented_reality_plugin_wikitude/wikitude_response.dart';
 
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:csv/csv.dart';
+import 'package:intl/intl.dart';
+
 
 class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
   ArchitectWidget architectWidget;
@@ -176,17 +179,16 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
         }else {
 //            print(angleList);
           print('Recording Stop');
+          String fileName = DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
+
           String csv = const ListToCsvConverter().convert(angleList);
           final directory = await getApplicationDocumentsDirectory();
-          final pathOfTheFileToWrite = directory.path + "/data.csv";
+          final pathOfTheFileToWrite = '${directory.path}/$fileName.csv';
           File file = File(pathOfTheFileToWrite);
           file.writeAsString(csv);
 
           print(csv);
 
-          String contents = await file.readAsString();
-          List<List<dynamic>> dataList =CsvToListConverter().convert(contents);
-          print(dataList);
         }
         setState(() {
 
@@ -357,9 +359,9 @@ class ArViewWidget extends StatefulWidget {
   ArViewState createState() => new ArViewState(sample);
 }
 
-class TimeSeriesAngle {
-  final double time;
-  final double angle;
-
-  TimeSeriesAngle(this.time, this.angle);
-}
+//class TimeSeriesAngle {
+//  final double time;
+//  final double angle;
+//
+//  TimeSeriesAngle(this.time, this.angle);
+//}
