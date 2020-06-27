@@ -10,7 +10,7 @@
 		</data>
 		<key>flutter_assets/AssetManifest.json</key>
 		<data>
-		37QB4EeOsOvrGbsykyX/s5RdfCA=
+		QBPfxfeTDqWxggJipW0goFzv+G0=
 		</data>
 		<key>flutter_assets/FontManifest.json</key>
 		<data>
@@ -18,7 +18,7 @@
 		</data>
 		<key>flutter_assets/LICENSE</key>
 		<data>
-		THt/CbCaBLBmu5w7yq6OZELpYX8=
+		ZbV1dBDw4GCZ7vDNhn59sl30qD4=
 		</data>
 		<key>flutter_assets/fonts/MaterialIcons-Regular.ttf</key>
 		<data>
@@ -30,7 +30,7 @@
 		</data>
 		<key>flutter_assets/kernel_blob.bin</key>
 		<data>
-		nBDRmj/9XV49CbVJdjgAcw/R1r8=
+		6B36mj708jwZfH2+lBpPCtXpH8w=
 		</data>
 		<key>flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
 		<data>
@@ -106,11 +106,11 @@
 		</data>
 		<key>flutter_assets/samples/01_ImageTracking_2_DifferentTargets/index.html</key>
 		<data>
-		ucjfOp14IIUZkImpGyAZ9OhXNEs=
+		yrrQF2udr/gzXjNLhGJrjwMhTdA=
 		</data>
 		<key>flutter_assets/samples/01_ImageTracking_2_DifferentTargets/js/multipletargets.js</key>
 		<data>
-		5NX7r86AOV41gqBbfApPzT48Nao=
+		IPhuhO4jlyOwwVba0VoTSjv4KPE=
 		</data>
 		<key>flutter_assets/samples/01_ImageTracking_3_Interactivity/assets/bike.png</key>
 		<data>
@@ -2772,9 +2772,13 @@
 		<data>
 		nFGspqLYvWCskyak+2j7q9nIBAs=
 		</data>
+		<key>flutter_assets/samples/js_info.json</key>
+		<data>
+		uQXsuqWjHNfATD9IRL1mefEaddk=
+		</data>
 		<key>flutter_assets/samples/samples.json</key>
 		<data>
-		SgW84+JfFKpymionmYcVVvllUm4=
+		UG9nwBu65Ts/ec2lUx2Fbo8S3+g=
 		</data>
 		<key>flutter_assets/samples/x_Demo_1_2dTrackingAndGeo/assets/ShopAd.wtc</key>
 		<data>
@@ -2951,7 +2955,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			pWgUznN+2/Ap3n5lZxh75Mvid8FjNtRFDiaefkjnKYw=
+			MRuq0nEdnfCZGocxWXJLndl31jj3xW6gpTvFKh1HFGc=
 			</data>
 		</dict>
 		<key>flutter_assets/FontManifest.json</key>
@@ -2965,7 +2969,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			vuNyUwoNN9lkjISDSHULRniKED76wBwSVbfTbSbTNQM=
+			g2aOQk2Z2vdieCPkXDuHDzlLVl1pC4EbuOZicFgrALQ=
 			</data>
 		</dict>
 		<key>flutter_assets/fonts/MaterialIcons-Regular.ttf</key>
@@ -2986,7 +2990,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			0+sRocvjGBVAGQ9ikFlD+nnprOqiGbAB2bg9kwARtCI=
+			p28vgFwtaXhL4LP/Ej6YRWZRSe0XxpNvnxBL3rc7kCs=
 			</data>
 		</dict>
 		<key>flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
@@ -3105,14 +3109,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			4BiheQq/jp7UIr2x8w2dFrsiK/Nx8zOnNp1Z3C38h1g=
+			X7fhNQP0q5YKX0mgUPZCR6f8stWCJ/GUZRbxIkP8Vj4=
 			</data>
 		</dict>
 		<key>flutter_assets/samples/01_ImageTracking_2_DifferentTargets/js/multipletargets.js</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			fJWo8WdIdQ5BTWnki2srrzoHgx0ROk1okkdkvMWZdUc=
+			uY2mfFs+a5wcqgTxcHh6D/ty8IOZxQiEign3CbNuKjY=
 			</data>
 		</dict>
 		<key>flutter_assets/samples/01_ImageTracking_3_Interactivity/assets/bike.png</key>
@@ -7770,11 +7774,18 @@
 			9v+CxB7XhMNAm+cW9rV44rKAuhvWDyq7p/xmvV60LKo=
 			</data>
 		</dict>
+		<key>flutter_assets/samples/js_info.json</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			HnDCRKQ3384MAQ5RThwY81pg2+KunIzE+aKkX7dN3qk=
+			</data>
+		</dict>
 		<key>flutter_assets/samples/samples.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			6Yz8DEwbAYXfBstRL33B7syg0RIT0s1P9W2iB7Eb4gE=
+			HOCi422w2NyUrf6P6+uRVsVJrVpT8du9TBG23bu/d0s=
 			</data>
 		</dict>
 		<key>flutter_assets/samples/x_Demo_1_2dTrackingAndGeo/assets/ShopAd.wtc</key>

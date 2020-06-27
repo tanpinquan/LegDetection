@@ -1,0 +1,14 @@
+{
+  "required_extensions": [
+    "data_transfer"
+  ],
+  "name": "Different Targets",
+  "path": "01_ImageTracking_2_DifferentTargets/index.html",
+  "requiredFeatures": [
+    "image_tracking"
+  ],
+  "startupConfiguration": {
+    "camera_position": "front",
+    "camera_resolution": "auto"
+  }
+}

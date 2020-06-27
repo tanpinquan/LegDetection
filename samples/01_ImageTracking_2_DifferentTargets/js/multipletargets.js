@@ -90,7 +90,7 @@ var World = {
                                 name: destinationTarget.name,
                                 data: [rotation.x, rotation.y, rotation.z, translation.x, translation.y, translation.z]
                             });
-                            World.updateDistanceToTarget(rotation.z);
+                            //World.updateDistanceToTarget(rotation.z);
 
                         //}
 
@@ -127,11 +127,11 @@ var World = {
         });
         */
     },
-    captureScreen: function captureScreenFn() {
-        AR.platform.sendJSONObject({
-            action: "get_data"
-        });
-    },
+//    captureScreen: function captureScreenFn() {
+//        AR.platform.sendJSONObject({
+//            action: "get_data"
+//        });
+//    },
 
     updateDistanceToTarget: function updateDistanceToTargetFn(distance) {
         document.getElementById('distanceDisplay').innerHTML = "Distance from target: " + distance + " cm";

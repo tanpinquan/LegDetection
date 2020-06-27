@@ -1,8 +1,9 @@
 import 'dart:convert';
 
+import 'package:augmented_reality_plugin_wikitude/startupConfiguration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:wikitude_flutter_app/customUrl.dart';
+//import 'package:wikitude_flutter_app/customUrl.dart';
 
 import 'arview.dart';
 import 'category.dart';
@@ -21,6 +22,7 @@ Future<String> _loadSamplesJson() async{
 
 Future _loadSamples() async{
   String samplesJson =  await _loadSamplesJson();
+  print(samplesJson);
   List<dynamic> categoriesFromJson = json.decode(samplesJson);
   List<Category> categories = new List();
 
@@ -30,7 +32,33 @@ Future _loadSamples() async{
   return categories;
 }
 
+//Future _loadJSInfo() async{
+//  print('load');
+//  String samplesJson =  await rootBundle.loadString('samples/js_info.json');
+//  print(samplesJson);
+//  Map<String, dynamic> infoFromJson = json.decode(samplesJson);
+////  print(infoFromJson);
+//  Sample sample = Sample.fromJson(infoFromJson);
+//  print(sample.name);
+//
+//
+//  return sample;
+//}
+
 class MyApp extends StatelessWidget {
+
+  Sample config = Sample(
+    name: 'Track Leg',
+    requiredExtensions: ["data_transfer"],
+    requiredFeatures: ["image_tracking"],
+    path: "01_ImageTracking_2_DifferentTargets/index.html",
+    startupConfiguration: StartupConfiguration(
+        cameraPosition: CameraPosition.FRONT,
+        cameraResolution: CameraResolution.AUTO
+    )
+
+
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +82,12 @@ class MainMenu extends StatefulWidget {
   MyAppState createState() => new MyAppState();
 }
 
+
+
 class MyAppState extends State<MainMenu> {
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -101,12 +134,6 @@ class MyAppState extends State<MainMenu> {
 
   void popupMenuSelectedItem(String item) {
     switch(item) {
-      case PopupMenuItems.customUrlLauncher:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => CustomUrl()),
-        );
-        break;
       case PopupMenuItems.sdkBuildInformation:
         _getSDKInfo();
         break;
@@ -136,6 +163,13 @@ class MyAppState extends State<MainMenu> {
       }
     );
   }
+
+//  @override
+//  void initState() {
+//    super.initState();
+//    print('init2');
+//    _loadJSInfo();
+//  }
 }
 
 class CategoryExpansionTile extends StatefulWidget {
