@@ -4,6 +4,7 @@ import io.flutter.plugin.common.PluginRegistry;
 import com.wikitude.wikitude_plugin.WikitudePlugin;
 import com.lyokone.location.LocationPlugin;
 import io.flutter.plugins.pathprovider.PathProviderPlugin;
+import com.csdcorp.speech_to_text.SpeechToTextPlugin;
 import creativecreatorormaybenot.wakelock.WakelockPlugin;
 
 /**
@@ -17,6 +18,7 @@ public final class GeneratedPluginRegistrant {
     WikitudePlugin.registerWith(registry.registrarFor("com.wikitude.wikitude_plugin.WikitudePlugin"));
     LocationPlugin.registerWith(registry.registrarFor("com.lyokone.location.LocationPlugin"));
     PathProviderPlugin.registerWith(registry.registrarFor("io.flutter.plugins.pathprovider.PathProviderPlugin"));
+    SpeechToTextPlugin.registerWith(registry.registrarFor("com.csdcorp.speech_to_text.SpeechToTextPlugin"));
     WakelockPlugin.registerWith(registry.registrarFor("creativecreatorormaybenot.wakelock.WakelockPlugin"));
   }
 

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:augmented_reality_plugin_wikitude/startupConfiguration.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,9 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:path/path.dart' as path;
 
+import 'package:speech_to_text/speech_to_text.dart';
+import 'package:speech_to_text/speech_recognition_error.dart';
+import 'package:speech_to_text/speech_recognition_result.dart';
 
 void main() => runApp(MyApp());
 
@@ -54,11 +58,6 @@ Future _loadSamples() async{
 
 class MyApp extends StatelessWidget {
 
-
-
-
-
-
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
@@ -90,8 +89,9 @@ class MyAppState extends State<MainMenu> {
       requiredFeatures: ["image_tracking"],
       path: "01_ImageTracking_2_DifferentTargets/index.html",
       startupConfiguration: StartupConfiguration(
-          cameraPosition: CameraPosition.FRONT,
-          cameraResolution: CameraResolution.AUTO
+        cameraPosition: CameraPosition.FRONT,
+        cameraResolution: CameraResolution.FULL_HD_1920x1080,
+        cameraFocusMode: CameraFocusMode.CONTINUOUS
       )
 
 
@@ -99,10 +99,23 @@ class MyAppState extends State<MainMenu> {
   List<FileSystemEntity> files = new List();
 
 
+  bool _hasSpeech = false;
+  double level = 0.0;
+  double minSoundLevel = 50000;
+  double maxSoundLevel = -50000;
+  String lastWords = "";
+  String lastError = "";
+  String lastStatus = "";
+  String _currentLocaleId = "";
+  List<LocaleName> _localeNames = [];
+  final SpeechToText speech = SpeechToText();
+
+
   @override
   void initState() {
     super.initState();
     getFiles();
+    initSpeechState();
 
   }
 
@@ -118,6 +131,41 @@ class MyAppState extends State<MainMenu> {
 
     setState(() {
 
+    });
+  }
+
+  Future<void> initSpeechState() async {
+    bool hasSpeech = await speech.initialize(
+        onError: errorListener, onStatus: statusListener);
+    if (hasSpeech) {
+      _localeNames = await speech.locales();
+
+      var systemLocale = await speech.systemLocale();
+      _currentLocaleId = systemLocale.localeId;
+    }
+
+    if (!mounted) return;
+    print(_currentLocaleId);
+    setState(() {
+      _hasSpeech = hasSpeech;
+    });
+    startListening();
+
+  }
+
+
+  void errorListener(SpeechRecognitionError error) {
+    print("Received error status: $error, listening: ${speech.isListening}");
+    setState(() {
+      lastError = "${error.errorMsg} - ${error.permanent}";
+    });
+  }
+
+  void statusListener(String status) {
+    print(
+        "Received listener status: $status, listening: ${speech.isListening}");
+    setState(() {
+      lastStatus = "$status";
     });
   }
 
@@ -187,10 +235,15 @@ class MyAppState extends State<MainMenu> {
       WikitudeResponse permissionsResponse = await _requestARPermissions(
           sample.requiredFeatures);
       if (permissionsResponse.success) {
+        cancelListening();
+
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => ArViewWidget(sample: sample)),
-        );
+        ).then((value){
+          getFiles();
+          startListening();
+        });
       } else {
         _showPermissionError(permissionsResponse.message);
       }
@@ -249,5 +302,56 @@ class MyAppState extends State<MainMenu> {
     );
   }
 
+
+
+  void startListening() {
+    lastWords = "";
+    lastError = "";
+    speech.listen(
+        onResult: resultListener,
+        listenFor: Duration(seconds: 100),
+        localeId: _currentLocaleId,
+        onSoundLevelChange: soundLevelListener,
+        cancelOnError: true,
+        partialResults: true);
+    print('listening');
+    setState(() {});
+  }
+
+  void stopListening() {
+    speech.stop();
+    setState(() {
+      level = 0.0;
+    });
+  }
+
+  void cancelListening() {
+    speech.cancel();
+    setState(() {
+      level = 0.0;
+    });
+  }
+
+  void resultListener(SpeechRecognitionResult result) {
+    setState(() {
+      lastWords = "${result.recognizedWords} - ${result.finalResult}";
+    });
+
+    List<String> stringList = result.recognizedWords.split(' ');
+    print(stringList);
+    if(stringList.last.toLowerCase().contains('start')){
+      _pushArView(arConfig);
+    }
+
+  }
+
+  void soundLevelListener(double level) {
+    minSoundLevel = min(minSoundLevel, level);
+    maxSoundLevel = max(maxSoundLevel, level);
+    //print("sound level $level: $minSoundLevel - $maxSoundLevel ");
+    setState(() {
+      this.level = level;
+    });
+  }
 }
 

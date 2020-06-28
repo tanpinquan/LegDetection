@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
@@ -21,6 +22,9 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:csv/csv.dart';
 import 'package:intl/intl.dart';
 
+import 'package:speech_to_text/speech_to_text.dart';
+import 'package:speech_to_text/speech_recognition_error.dart';
+import 'package:speech_to_text/speech_recognition_result.dart';
 
 class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
   ArchitectWidget architectWidget;
@@ -49,6 +53,18 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
 
   bool _isRecording = false;
 
+  bool _hasSpeech = false;
+  double level = 0.0;
+  double minSoundLevel = 50000;
+  double maxSoundLevel = -50000;
+  String lastWords = "";
+  String lastError = "";
+  String lastStatus = "";
+  String _currentLocaleId = "";
+  List<LocaleName> _localeNames = [];
+  final SpeechToText speech = SpeechToText();
+
+
   @override
   void initState() {
     super.initState();
@@ -63,7 +79,26 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
     );
 
     Wakelock.enable();
+    initSpeechState();
   }
+
+  Future<void> initSpeechState() async {
+    bool hasSpeech = await speech.initialize(
+        onError: errorListener, onStatus: statusListener);
+    if (hasSpeech) {
+      _localeNames = await speech.locales();
+
+      var systemLocale = await speech.systemLocale();
+      _currentLocaleId = systemLocale.localeId;
+    }
+
+    if (!mounted) return;
+    print(_currentLocaleId);
+    _hasSpeech = hasSpeech;
+    startListening();
+
+  }
+
 
   @override
   void dispose() {
@@ -169,32 +204,58 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
       color: _isRecording ? Colors.red : Colors.green,
       textColor: Colors.white,
       child: Text(_isRecording?'Stop Rec':'Start Rec'),
-      onPressed: ()async{
-
-
-        _isRecording = !_isRecording;
-
-        if(_isRecording){
-          print('Recording Start');
-        }else {
-//            print(angleList);
-          print('Recording Stop');
-          String fileName = DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
-
-          String csv = const ListToCsvConverter().convert(angleList);
-          final directory = await getApplicationDocumentsDirectory();
-          final pathOfTheFileToWrite = '${directory.path}/$fileName.csv';
-          File file = File(pathOfTheFileToWrite);
-          file.writeAsString(csv);
-
-          print(csv);
-
-        }
-        setState(() {
-
-        });
-      },
+      onPressed: _toggleRecording
+//          ()async{
+//
+//
+//        _isRecording = !_isRecording;
+//
+//        if(_isRecording){
+//          print('Recording Start');
+//        }else {
+////            print(angleList);
+//          print('Recording Stop');
+//          String fileName = DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
+//
+//          String csv = const ListToCsvConverter().convert(angleList);
+//          final directory = await getApplicationDocumentsDirectory();
+//          final pathOfTheFileToWrite = '${directory.path}/$fileName.csv';
+//          File file = File(pathOfTheFileToWrite);
+//          file.writeAsString(csv);
+//
+//          print(csv);
+//
+//        }
+//        setState(() {
+//
+//        });
+//      },
     );
+  }
+
+  void _toggleRecording()async{
+
+    _isRecording = !_isRecording;
+
+    if(_isRecording){
+      print('Recording Start');
+    }else {
+//            print(angleList);
+      print('Recording Stop');
+      String fileName = DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
+
+      String csv = const ListToCsvConverter().convert(angleList);
+      final directory = await getApplicationDocumentsDirectory();
+      final pathOfTheFileToWrite = '${directory.path}/$fileName.csv';
+      File file = File(pathOfTheFileToWrite);
+      file.writeAsString(csv);
+
+//      print(csv);
+
+    }
+    setState(() {
+
+    });
   }
 
 
@@ -218,7 +279,7 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
     if(_isRecording){
       angleList.add(hipTrackingData);
       angleList.last.insert(0, timeElapsed);
-      print('$hipTrackingData, ${hipTrackingData.runtimeType}');
+//      print('$hipTrackingData, ${hipTrackingData.runtimeType}');
     }
 
 
@@ -343,6 +404,75 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
 
   Future<void> onLoadFailed(String error) async {
     showSingleButtonDialog("Failed to load Architect World", error, "Ok");
+  }
+
+  void errorListener(SpeechRecognitionError error) {
+    print("Received error status: $error, listening: ${speech.isListening}");
+    setState(() {
+      lastError = "${error.errorMsg} - ${error.permanent}";
+    });
+  }
+
+  void statusListener(String status) {
+    print(
+        "Received listener status: $status, listening: ${speech.isListening}");
+    setState(() {
+      lastStatus = "$status";
+    });
+  }
+
+  void startListening() {
+    lastWords = "";
+    lastError = "";
+    speech.listen(
+        onResult: resultListener,
+        listenFor: Duration(seconds: 1200),
+        localeId: _currentLocaleId,
+        onSoundLevelChange: soundLevelListener,
+        cancelOnError: true,
+        partialResults: true);
+    print('listening');
+//    setState(() {});
+  }
+
+  void stopListening() {
+    speech.stop();
+    setState(() {
+      level = 0.0;
+    });
+  }
+
+  void cancelListening() {
+    speech.cancel();
+    setState(() {
+      level = 0.0;
+    });
+  }
+
+  void resultListener(SpeechRecognitionResult result) {
+    List<String> stringList = result.recognizedWords.split(' ');
+
+    print(stringList);
+    if(stringList.length>1){
+      if(stringList[stringList.length-2].toLowerCase().contains('start') && stringList.last.contains('record') &&  !_isRecording){
+        _toggleRecording();
+      }else if(stringList[stringList.length-2].toLowerCase().contains('stop') && stringList.last.contains('record') &&  _isRecording){
+        _toggleRecording();
+
+      }
+    }
+
+
+
+  }
+
+  void soundLevelListener(double level) {
+    minSoundLevel = min(minSoundLevel, level);
+    maxSoundLevel = max(maxSoundLevel, level);
+    //print("sound level $level: $minSoundLevel - $maxSoundLevel ");
+    setState(() {
+      this.level = level;
+    });
   }
 }
 

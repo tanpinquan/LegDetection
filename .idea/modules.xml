@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/wikitude-flutter-plugin-examples-master.iml" filepath="$PROJECT_DIR$/.idea/wikitude-flutter-plugin-examples-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/wikitude_leg_detection.iml" filepath="$PROJECT_DIR$/.idea/wikitude_leg_detection.iml" />
     </modules>
   </component>
 </project>

@@ -1,8 +1,8 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
 export "FLUTTER_ROOT=/Users/pinquan/Development/flutter"
-export "FLUTTER_APPLICATION_PATH=/Users/pinquan/StudioProjects/wikitude-flutter-plugin-examples-master"
-export "FLUTTER_TARGET=/Users/pinquan/StudioProjects/wikitude-flutter-plugin-examples-master/lib/main.dart"
+export "FLUTTER_APPLICATION_PATH=/Users/pinquan/StudioProjects/wikitude_leg_detection"
+export "FLUTTER_TARGET=/Users/pinquan/StudioProjects/wikitude_leg_detection/lib/main.dart"
 export "FLUTTER_BUILD_DIR=build"
 export "SYMROOT=${SOURCE_ROOT}/../build/ios"
 export "OTHER_LDFLAGS=$(inherited) -framework Flutter"
