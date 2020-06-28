@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:augmented_reality_plugin_wikitude/startupConfiguration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:wikitude_flutter_app/arm_tracking_view.dart';
 import 'package:wikitude_flutter_app/plotView.dart';
 //import 'package:wikitude_flutter_app/customUrl.dart';
 
@@ -124,9 +125,13 @@ class MyAppState extends State<MainMenu> {
     print(directory);
 
     files = Directory("$directory").listSync();  //use your folder name insted of resume.
+
+    files.sort((a, b) => a.path.compareTo(b.path));
+
     print(files);
 
-    print(path.basename(files[0].path));
+
+//    print(path.basename(files[0].path));
     print('init');
 
     setState(() {
@@ -176,14 +181,25 @@ class MyAppState extends State<MainMenu> {
 
     widgetList.addAll([
       ListTile(
-          title: Text('Track Exercise'),
+          title: Text('Track Knee Exercise'),
           trailing: Icon(Icons.arrow_forward_ios),
           onTap: (){
             _pushArView(arConfig);
           }
       ),
+      ListTile(
+          title: Text('Track Shoulder Exercise'),
+          trailing: Icon(Icons.arrow_forward_ios),
+          onTap: (){
+            _pushArmTrackingView(arConfig);
+          }
+      ),
       Divider(height: 0,),
       Container(height: 50,),
+      ListTile(
+        title: Text('View Recordings', style: Theme.of(context).textTheme.subtitle2,),
+        dense: true,
+      ),
       Divider(height: 0,),
     ]);
     
@@ -193,10 +209,15 @@ class MyAppState extends State<MainMenu> {
           ListTile(
             title: Text(fileName),
             onTap: (){
+              cancelListening();
+
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => PlotView(fileName:fileName)),
-              );
+              ).then((value){
+                getFiles();
+                startListening();
+              });;
             },
           )
       );
@@ -206,7 +227,7 @@ class MyAppState extends State<MainMenu> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Leg Tacking'),
+        title: const Text('Exercise Tacking'),
       ),
       body: ListView(
         children: widgetList
@@ -240,6 +261,30 @@ class MyAppState extends State<MainMenu> {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => ArViewWidget(sample: sample)),
+        ).then((value){
+          getFiles();
+          startListening();
+        });
+      } else {
+        _showPermissionError(permissionsResponse.message);
+      }
+    }else{
+      _showNotSupportedError(supportedResponse.message);
+    }
+  }
+
+  Future<void> _pushArmTrackingView(Sample sample) async {
+    WikitudeResponse supportedResponse = await _isDeviceSupporting(sample.requiredFeatures);
+
+    if(supportedResponse.success) {
+      WikitudeResponse permissionsResponse = await _requestARPermissions(
+          sample.requiredFeatures);
+      if (permissionsResponse.success) {
+        cancelListening();
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ArmTrackingViewWidget(sample: sample)),
         ).then((value){
           getFiles();
           startListening();

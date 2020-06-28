@@ -242,7 +242,7 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
     }else {
 //            print(angleList);
       print('Recording Stop');
-      String fileName = DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
+      String fileName = 'Knee ' + DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
 
       String csv = const ListToCsvConverter().convert(angleList);
       final directory = await getApplicationDocumentsDirectory();
@@ -329,6 +329,8 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
         case "get_data":
           hipTrackingData = List<dynamic>.from(jsonObject["data"]);
           trackedJoint = jsonObject["name"];
+
+
           updateDisplay(jsonObject);
 
           break;

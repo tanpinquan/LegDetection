@@ -80,7 +80,7 @@ var World = {
                     name: target.name
                 });
 
-                if(target.name === "image_knee"){
+                if(target.name === "image_knee" || target.name =="image_body"){
 
                     target.onRotationChanged = function(rotation, destinationTarget) {
                         var translation = target.getTranslationTo(destinationTarget);

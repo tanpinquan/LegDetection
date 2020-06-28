@@ -17,15 +17,34 @@ class PlotView extends StatefulWidget {
 
 class _PlotViewState extends State<PlotView> {
 
-  List<TimeSeriesAngle> dataList = [];
+  List<TimeSeriesAngle> kneeDataList = [];
   List<charts.Series<TimeSeriesAngle, double>> seriesList = [];
+  List<TimeSeriesAngle> upperArmDataList = [];
+  List<TimeSeriesAngle> lowerArmDataList = [];
+  bool _isShoulder = false;
 
+  File file;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.fileName),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.delete),
+            onPressed: () async {
+              final bool confirm = await showDeleteDialog('Confirm delete?', 'This cannot be undone');
+              if(confirm){
+                await file.delete(recursive: false);
+                Navigator.of(context).pop();
+
+              }
+
+
+            },
+          )
+        ],
       ),
       body: _buildChart(),
     );
@@ -40,26 +59,55 @@ class _PlotViewState extends State<PlotView> {
   Future<void> _loadData() async {
     final directory = await getApplicationDocumentsDirectory();
     final pathOfTheFileToWrite = directory.path + "/" + widget.fileName;
-    File file = File(pathOfTheFileToWrite);
+    file = File(pathOfTheFileToWrite);
 
 
     String contents = await file.readAsString();
     List<List<dynamic>> loadedData =CsvToListConverter().convert(contents);
 //    print(loadedData);
+    _isShoulder = loadedData[0].length == 8;
+    print(_isShoulder);
 
-    for (final data in loadedData){
-      dataList.add(TimeSeriesAngle(data[0], data[3]));
-    }
-    seriesList = [
-      charts.Series<TimeSeriesAngle, double>(
-        id: 'Angle',
-        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-        domainFn: (TimeSeriesAngle angle, _) => angle.time,
-        measureFn: (TimeSeriesAngle angle, _) => angle.angle,
+    if(_isShoulder){
+      for (final data in loadedData){
+        if(data.last==0) {
+          upperArmDataList.add(TimeSeriesAngle(data[0], data[3]));
+        }else {
+          lowerArmDataList.add(TimeSeriesAngle(data[0], data[3]));
+        }
+
+      }
+      seriesList = [
+        charts.Series<TimeSeriesAngle, double>(
+          id: 'Upper Arm',
+          colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+          domainFn: (TimeSeriesAngle angle, _) => angle.time,
+          measureFn: (TimeSeriesAngle angle, _) => angle.angle,
+          data: upperArmDataList,
+        ),
+        charts.Series<TimeSeriesAngle, double>(
+          id: 'Lower Arm',
+          colorFn: (_, __) => charts.MaterialPalette.green.shadeDefault,
+          domainFn: (TimeSeriesAngle angle, _) => angle.time,
+          measureFn: (TimeSeriesAngle angle, _) => angle.angle,
+          data: lowerArmDataList,
+        )
+      ];
+    }else {
+      for (final data in loadedData) {
+        kneeDataList.add(TimeSeriesAngle(data[0], data[3]));
+      }
+      seriesList = [
+        charts.Series<TimeSeriesAngle, double>(
+          id: 'Knee Angle',
+          colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+          domainFn: (TimeSeriesAngle angle, _) => angle.time,
+          measureFn: (TimeSeriesAngle angle, _) => angle.angle,
 //        radiusPxFn: (TimeSeriesAngle angle, _) => 1,
-        data: dataList,
-      )
-    ];
+          data: kneeDataList,
+        )
+      ];
+    }
 
     setState(() {
 
@@ -72,16 +120,37 @@ class _PlotViewState extends State<PlotView> {
         seriesList,
         animate: false,
         defaultRenderer: new charts.LineRendererConfig(includePoints: true),
-        behaviors: [charts.PanAndZoomBehavior()],
+        behaviors: [charts.PanAndZoomBehavior(), charts.SeriesLegend()],
         primaryMeasureAxis: charts.NumericAxisSpec(
           viewport: charts.NumericExtents(-180,180)
         ),
 
+    );
+  }
 
-      // Optionally pass in a [DateTimeFactory] used by the chart. The factory
-      // should create the same type of [DateTime] as the data provided. If none
-      // specified, the default creates local date time.
-      //dateTimeFactory: const charts.LocalDateTimeFactory(),
+  Future<bool> showDeleteDialog(String title, String content) {
+    return showDialog<bool>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: <Widget>[
+              FlatButton(
+                child: const Text('Cancel'),
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                },
+              ),
+              FlatButton(
+                child: const Text('Confirm'),
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+              )
+            ],
+          );
+        }
     );
   }
 }
