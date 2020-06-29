@@ -10,7 +10,7 @@
 		</data>
 		<key>flutter_assets/AssetManifest.json</key>
 		<data>
-		DydT9jhEzSJQwzNtXRU2dYTin9I=
+		T1YQrArRbdVWCjpN7YEL8R/cpJk=
 		</data>
 		<key>flutter_assets/FontManifest.json</key>
 		<data>
@@ -30,7 +30,7 @@
 		</data>
 		<key>flutter_assets/kernel_blob.bin</key>
 		<data>
-		kBVOd4GVmoY9Qj63cyU8btYTe7s=
+		RyNkUWPPVFPSzJnIRWTmQ3rQnwg=
 		</data>
 		<key>flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
 		<data>
@@ -80,6 +80,26 @@
 		<data>
 		7ltAnLt7fDOU2TWZisAMQiOMb3k=
 		</data>
+		<key>flutter_assets/samples/01_ImageTracking_2_DifferentTargets/assets/image_body.png</key>
+		<data>
+		NpshRxd3HRYT3qy/Tvzjh2mgndQ=
+		</data>
+		<key>flutter_assets/samples/01_ImageTracking_2_DifferentTargets/assets/image_calf.png</key>
+		<data>
+		UDm+XQQGBYt7pQmERmDeNNwiJ08=
+		</data>
+		<key>flutter_assets/samples/01_ImageTracking_2_DifferentTargets/assets/image_lower_arm.png</key>
+		<data>
+		XI/j/ngvkBCJVCxILBTepokoAEc=
+		</data>
+		<key>flutter_assets/samples/01_ImageTracking_2_DifferentTargets/assets/image_thigh.png</key>
+		<data>
+		fQMMvDoMCOw6YQfrPmUsFe55MYs=
+		</data>
+		<key>flutter_assets/samples/01_ImageTracking_2_DifferentTargets/assets/image_upper_arm.png</key>
+		<data>
+		DDwQQG/LNHSfiOaPpvCk1vmKGR4=
+		</data>
 		<key>flutter_assets/samples/01_ImageTracking_2_DifferentTargets/assets/magazine.wtc</key>
 		<data>
 		3L+JTrc7vmc+ecPNhF++F0JSXdE=
@@ -98,7 +118,7 @@
 		</data>
 		<key>flutter_assets/samples/01_ImageTracking_2_DifferentTargets/assets/tracker_leg_arm.wtc</key>
 		<data>
-		DQpMeJFM9zlgxpU/qF09fJ+6FrM=
+		bRCBL2TDDW8MTBwKir93FPRMpuI=
 		</data>
 		<key>flutter_assets/samples/01_ImageTracking_2_DifferentTargets/assets/tracker_small.wtc</key>
 		<data>
@@ -114,7 +134,7 @@
 		</data>
 		<key>flutter_assets/samples/01_ImageTracking_2_DifferentTargets/js/multipletargets.js</key>
 		<data>
-		GHSmT+PHjEVTou3a98+IkVQO6/w=
+		1RAN6c9OJ0lG+9mW+xkPV5WjQsE=
 		</data>
 		<key>flutter_assets/samples/01_ImageTracking_3_Interactivity/assets/bike.png</key>
 		<data>
@@ -2959,7 +2979,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			bIpgB200ww5/wwtNsuNXs/jW9oaMLECvcSheOnmTCIk=
+			EhT2QAnsT7Cg35b3VZqJzqF2fixd8/Oyk7/pPI4cReI=
 			</data>
 		</dict>
 		<key>flutter_assets/FontManifest.json</key>
@@ -2994,7 +3014,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			w20d2fspHKO2eS6f2MCy9vIpyiOxPysaGnjM/g0GZAc=
+			pj3ezOMO4j9JXJ7oQ4O0Q7+EAwAAQNKeiu0FR898Vdo=
 			</data>
 		</dict>
 		<key>flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
@@ -3067,6 +3087,41 @@
 			jiWQkhhr+0Vfh6ss+ZR48JWZtTVbrWBzv2iDPXm62q4=
 			</data>
 		</dict>
+		<key>flutter_assets/samples/01_ImageTracking_2_DifferentTargets/assets/image_body.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			okzfHuitoZy0ioOxg7FmAdRvs2TS9DZBm5y6rvSe0Oo=
+			</data>
+		</dict>
+		<key>flutter_assets/samples/01_ImageTracking_2_DifferentTargets/assets/image_calf.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			W7LKPWb+jCk20KgvxyS9TU/bdTurqs21/TIfiOdteH4=
+			</data>
+		</dict>
+		<key>flutter_assets/samples/01_ImageTracking_2_DifferentTargets/assets/image_lower_arm.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			MFjv/9Yzl1rdZr/CCTvF4H5IYVxEL8C/l56fsfK3PpE=
+			</data>
+		</dict>
+		<key>flutter_assets/samples/01_ImageTracking_2_DifferentTargets/assets/image_thigh.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			QqbH5FjeFZfyo42UkhM5SWV/LMKvssF1tWlIXbQQxF0=
+			</data>
+		</dict>
+		<key>flutter_assets/samples/01_ImageTracking_2_DifferentTargets/assets/image_upper_arm.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			Q/KyuYAQuKDmxw6MAL95VBv90SBebZhqZIrJmHBBJUk=
+			</data>
+		</dict>
 		<key>flutter_assets/samples/01_ImageTracking_2_DifferentTargets/assets/magazine.wtc</key>
 		<dict>
 			<key>hash2</key>
@@ -3099,7 +3154,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			ePZMdH48z/nFTBjVkIaliZXxSDr6cbiXbAOiXwg65Ys=
+			Dnq1FQKDdJvZbqk6wqRLdMg6z3DgRubZxq/c7zsfLM4=
 			</data>
 		</dict>
 		<key>flutter_assets/samples/01_ImageTracking_2_DifferentTargets/assets/tracker_small.wtc</key>
@@ -3127,7 +3182,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			KDo7+F9ezjA808WFp3VifnAexpFM29lD98rckeLF+cw=
+			VEul8MX/2dHSMyfl7oKEOySULLmH5QAxiJwXCgWB4QA=
 			</data>
 		</dict>
 		<key>flutter_assets/samples/01_ImageTracking_3_Interactivity/assets/bike.png</key>

@@ -455,11 +455,15 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
     List<String> stringList = result.recognizedWords.split(' ');
 
     print(stringList);
-    if(stringList.length>1){
-      if(stringList[stringList.length-2].toLowerCase().contains('start') && stringList.last.contains('record') &&  !_isRecording){
+    if(stringList.length>0){
+      if(stringList.last.toLowerCase().contains('start') &&  !_isRecording){
         _toggleRecording();
-      }else if(stringList[stringList.length-2].toLowerCase().contains('stop') && stringList.last.contains('record') &&  _isRecording){
+      }else if(stringList.last.toLowerCase().contains('stop') &&  _isRecording){
         _toggleRecording();
+
+      }else if(stringList.last.toLowerCase().contains('back')){
+//        cancelListening();
+        Navigator.of(context).pop();
 
       }
     }

@@ -98,7 +98,7 @@ class MyAppState extends State<MainMenu> {
 
   );
   List<FileSystemEntity> files = new List();
-
+  List<String> stringList = [];
 
   bool _hasSpeech = false;
   double level = 0.0;
@@ -118,6 +118,13 @@ class MyAppState extends State<MainMenu> {
     getFiles();
     initSpeechState();
 
+  }
+
+
+  @override
+  void dispose() {
+    stopListening();
+    super.dispose();
   }
 
   void getFiles()async{
@@ -159,20 +166,53 @@ class MyAppState extends State<MainMenu> {
   }
 
 
-  void errorListener(SpeechRecognitionError error) {
-    print("Received error status: $error, listening: ${speech.isListening}");
-    setState(() {
-      lastError = "${error.errorMsg} - ${error.permanent}";
-    });
+  Widget _buildSpeechDisplay(){
+    if(speech.isNotListening){
+      return Container(
+          width: double.infinity,
+          height: 50,
+          child: RaisedButton(
+            color: Colors.green,
+            child: Text('Enable voice control',style: Theme.of(context).textTheme.headline6,),
+            onPressed: startListening,
+          )
+      );
+
+    }
+
+
+    String string;
+
+    if(speech.isNotListening){
+      string = 'Voice Recognition Disabled';
+    }
+    else if(stringList.isEmpty){
+      string = 'Say something';
+    }else if(stringList.length==1){
+      string = stringList.last.toLowerCase();
+    }else{
+      string = stringList.sublist(stringList.length-2).join(" ");
+    }
+
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 0),
+      color: Colors.grey,
+      height: 50,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+            RaisedButton(
+              color: Colors.red,
+              child: Text('Stop Listening'),
+              onPressed: cancelListening,
+            ),
+            Expanded(child: Center(child: Text(string, style: Theme.of(context).textTheme.headline6,))),
+
+        ],
+      ),
+    );
   }
 
-  void statusListener(String status) {
-    print(
-        "Received listener status: $status, listening: ${speech.isListening}");
-    setState(() {
-      lastStatus = "$status";
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -181,14 +221,14 @@ class MyAppState extends State<MainMenu> {
 
     widgetList.addAll([
       ListTile(
-          title: Text('Track Knee Exercise'),
+          title: Text('Track Knee Exercise (say: \'knee flexion\')'),
           trailing: Icon(Icons.arrow_forward_ios),
           onTap: (){
             _pushArView(arConfig);
           }
       ),
       ListTile(
-          title: Text('Track Shoulder Exercise'),
+          title: Text('Track Shoulder Exercise (say: \'shoulder flexion\')'),
           trailing: Icon(Icons.arrow_forward_ios),
           onTap: (){
             _pushArmTrackingView(arConfig);
@@ -216,7 +256,7 @@ class MyAppState extends State<MainMenu> {
                 MaterialPageRoute(builder: (context) => PlotView(fileName:fileName)),
               ).then((value){
                 getFiles();
-                startListening();
+//                startListening();
               });;
             },
           )
@@ -232,6 +272,7 @@ class MyAppState extends State<MainMenu> {
       body: ListView(
         children: widgetList
       ),
+      bottomNavigationBar: _buildSpeechDisplay()
 
 
     );
@@ -352,9 +393,10 @@ class MyAppState extends State<MainMenu> {
   void startListening() {
     lastWords = "";
     lastError = "";
+    stringList = [];
     speech.listen(
         onResult: resultListener,
-        listenFor: Duration(seconds: 100),
+        listenFor: Duration(seconds: 60),
         localeId: _currentLocaleId,
         onSoundLevelChange: soundLevelListener,
         cancelOnError: true,
@@ -381,12 +423,25 @@ class MyAppState extends State<MainMenu> {
     setState(() {
       lastWords = "${result.recognizedWords} - ${result.finalResult}";
     });
+    stringList = result.recognizedWords.split(' ');
 
-    List<String> stringList = result.recognizedWords.split(' ');
+
     print(stringList);
-    if(stringList.last.toLowerCase().contains('start')){
-      _pushArView(arConfig);
+//    print(result.alternates);
+    if(stringList.length>1){
+      if(stringList[stringList.length-2].toLowerCase().contains('knee') && stringList.last.contains('flexion')){
+        _pushArView(arConfig);
+      }else if(stringList[stringList.length-2].toLowerCase().contains('shoulder') && stringList.last.contains('flexion')){
+        _pushArmTrackingView(arConfig);
+
+      }
     }
+
+//    if(stringList.last.toLowerCase().contains('knee')){
+//      _pushArView(arConfig);
+//    }else if(stringList.last.toLowerCase().contains('shoulder')){
+//      _pushArmTrackingView(arConfig);
+//    }
 
   }
 
@@ -396,6 +451,21 @@ class MyAppState extends State<MainMenu> {
     //print("sound level $level: $minSoundLevel - $maxSoundLevel ");
     setState(() {
       this.level = level;
+    });
+  }
+
+  void errorListener(SpeechRecognitionError error) {
+    print("Received error status: $error, listening: ${speech.isListening}");
+    setState(() {
+      lastError = "${error.errorMsg} - ${error.permanent}";
+    });
+  }
+
+  void statusListener(String status) {
+    print(
+        "Received listener status: $status, listening: ${speech.isListening}");
+    setState(() {
+      lastStatus = "$status";
     });
   }
 }

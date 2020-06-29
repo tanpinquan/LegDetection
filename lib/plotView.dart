@@ -18,10 +18,22 @@ class PlotView extends StatefulWidget {
 class _PlotViewState extends State<PlotView> {
 
   List<TimeSeriesAngle> kneeDataList = [];
-  List<charts.Series<TimeSeriesAngle, double>> seriesList = [];
+  List<TimeSeriesAngle> kneeDataList2 = [];
+  List<TimeSeriesAngle> kneeDataList3 = [];
+
+  List<charts.Series<TimeSeriesAngle, double>> seriesList1 = [];
+  List<charts.Series<TimeSeriesAngle, double>> seriesList2 = [];
   List<TimeSeriesAngle> upperArmDataList = [];
   List<TimeSeriesAngle> lowerArmDataList = [];
   bool _isShoulder = false;
+
+  double _angleThreshold = -45;
+  double _prevAngle = 0;
+  double _currAngle = 0;
+  List<double> _startTimes = [];
+  List<double> _endTimes = [];
+  List<double> _angles = [];
+
 
   File file;
 
@@ -46,7 +58,17 @@ class _PlotViewState extends State<PlotView> {
           )
         ],
       ),
-      body: _buildChart(),
+      body: Column(
+        children: <Widget>[
+          _buildChart(),
+
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 8),
+              child: Text('Knee Angles: ' + _angles.join(", "))
+          )
+
+        ],
+      ),
     );
   }
 
@@ -67,6 +89,7 @@ class _PlotViewState extends State<PlotView> {
 //    print(loadedData);
     _isShoulder = loadedData[0].length == 8;
     print(_isShoulder);
+    double maxAngle = 0;
 
     if(_isShoulder){
       for (final data in loadedData){
@@ -77,7 +100,7 @@ class _PlotViewState extends State<PlotView> {
         }
 
       }
-      seriesList = [
+      seriesList1 = [
         charts.Series<TimeSeriesAngle, double>(
           id: 'Upper Arm',
           colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
@@ -96,8 +119,34 @@ class _PlotViewState extends State<PlotView> {
     }else {
       for (final data in loadedData) {
         kneeDataList.add(TimeSeriesAngle(data[0], data[3]));
+        kneeDataList2.add(TimeSeriesAngle(data[0], data[1]));
+        kneeDataList3.add(TimeSeriesAngle(data[0], data[2]));
+
+        _currAngle = data[3];
+        if(_currAngle<_angleThreshold && _prevAngle>_angleThreshold){
+          _startTimes.add(data[0]);
+          print(_startTimes);
+        }
+
+        if(_currAngle>_angleThreshold && _prevAngle<_angleThreshold){
+          _endTimes.add(data[0]);
+          _angles.add(maxAngle);
+          maxAngle = 0;
+          print(_endTimes);
+          print(_angles);
+        }
+
+        if(_startTimes.length>_endTimes.length && maxAngle>_currAngle){
+          maxAngle = _currAngle;
+
+        }
+
+
+        _prevAngle = _currAngle;
+
+
       }
-      seriesList = [
+      seriesList1 = [
         charts.Series<TimeSeriesAngle, double>(
           id: 'Knee Angle',
           colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
@@ -105,6 +154,23 @@ class _PlotViewState extends State<PlotView> {
           measureFn: (TimeSeriesAngle angle, _) => angle.angle,
 //        radiusPxFn: (TimeSeriesAngle angle, _) => 1,
           data: kneeDataList,
+        )
+      ];
+      seriesList2 = [
+        charts.Series<TimeSeriesAngle, double>(
+          id: 'Knee Angle X',
+          colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+          domainFn: (TimeSeriesAngle angle, _) => angle.time,
+          measureFn: (TimeSeriesAngle angle, _) => angle.angle,
+//        radiusPxFn: (TimeSeriesAngle angle, _) => 1,
+          data: kneeDataList2,
+        ),
+        charts.Series<TimeSeriesAngle, double>(
+          id: 'Knee Angle Y',
+          colorFn: (_, __) => charts.MaterialPalette.green.shadeDefault,
+          domainFn: (TimeSeriesAngle angle, _) => angle.time,
+          measureFn: (TimeSeriesAngle angle, _) => angle.angle,
+          data: kneeDataList3,
         )
       ];
     }
@@ -116,15 +182,36 @@ class _PlotViewState extends State<PlotView> {
   }
 
   Widget _buildChart(){
-    return charts.LineChart(
-        seriesList,
-        animate: false,
+    return Container(
+      height: 300,
+      child: charts.LineChart(
+        seriesList1,
+        animate: true,
         defaultRenderer: new charts.LineRendererConfig(includePoints: true),
-        behaviors: [charts.PanAndZoomBehavior(), charts.SeriesLegend()],
+        behaviors: [charts.SeriesLegend(), charts.PanAndZoomBehavior()],
         primaryMeasureAxis: charts.NumericAxisSpec(
-          viewport: charts.NumericExtents(-180,180)
+
+            viewport: charts.NumericExtents(-180,180)
         ),
 
+      ),
+    );
+  }
+
+  Widget _buildChart2(){
+    return Container(
+      height: 300,
+      child: charts.LineChart(
+        seriesList2,
+        animate: true,
+        defaultRenderer: new charts.LineRendererConfig(includePoints: true),
+        behaviors: [charts.SeriesLegend(), charts.PanAndZoomBehavior()],
+        primaryMeasureAxis: charts.NumericAxisSpec(
+
+            viewport: charts.NumericExtents(-180,180)
+        ),
+
+      ),
     );
   }
 

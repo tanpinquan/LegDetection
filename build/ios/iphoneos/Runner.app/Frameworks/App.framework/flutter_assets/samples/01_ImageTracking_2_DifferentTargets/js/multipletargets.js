@@ -70,9 +70,9 @@ var World = {
             certain group of targets.
         */
         this.pageOne = new AR.ImageTrackable(this.tracker, "*", {
-            drawables: {
-                cam: overlayOne
-            },
+            // drawables: {
+            //     cam: overlayOne
+            // },
             onImageRecognized: function(target) {
 
                 AR.platform.sendJSONObject({
@@ -80,7 +80,21 @@ var World = {
                     name: target.name
                 });
 
-                if(target.name === "image_knee" || target.name =="image_body"){
+                var imgOverlay = new AR.ImageResource("assets/" + target.name + ".png", {
+                    onError: World.onError
+                });
+                var overlay = new AR.ImageDrawable(imgOverlay, 1, {
+                    translate: {
+                        x: 0.0,
+                        y: 0.
+                    },
+                    scale: 0.75
+                });
+
+                this.addImageTargetCamDrawables(target, overlay);
+
+
+                if(target.name === "image_thigh" || target.name ==="image_body"){
 
                     target.onRotationChanged = function(rotation, destinationTarget) {
                         var translation = target.getTranslationTo(destinationTarget);
