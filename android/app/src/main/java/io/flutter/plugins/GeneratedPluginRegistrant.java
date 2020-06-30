@@ -2,6 +2,7 @@ package io.flutter.plugins;
 
 import io.flutter.plugin.common.PluginRegistry;
 import com.wikitude.wikitude_plugin.WikitudePlugin;
+import com.tundralabs.fluttertts.FlutterTtsPlugin;
 import com.lyokone.location.LocationPlugin;
 import io.flutter.plugins.pathprovider.PathProviderPlugin;
 import com.csdcorp.speech_to_text.SpeechToTextPlugin;
@@ -16,6 +17,7 @@ public final class GeneratedPluginRegistrant {
       return;
     }
     WikitudePlugin.registerWith(registry.registrarFor("com.wikitude.wikitude_plugin.WikitudePlugin"));
+    FlutterTtsPlugin.registerWith(registry.registrarFor("com.tundralabs.fluttertts.FlutterTtsPlugin"));
     LocationPlugin.registerWith(registry.registrarFor("com.lyokone.location.LocationPlugin"));
     PathProviderPlugin.registerWith(registry.registrarFor("io.flutter.plugins.pathprovider.PathProviderPlugin"));
     SpeechToTextPlugin.registerWith(registry.registrarFor("com.csdcorp.speech_to_text.SpeechToTextPlugin"));

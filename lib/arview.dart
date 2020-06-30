@@ -26,6 +26,11 @@ import 'package:speech_to_text/speech_to_text.dart';
 import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 
+import 'package:flutter_tts/flutter_tts.dart';
+
+
+enum TtsState { playing, stopped, paused, continued }
+
 class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
   ArchitectWidget architectWidget;
   String wikitudeTrialLicenseKey = "rRcPFV/GWHOalFjHX9rP9TWGNRKVu8P4FSKvHtps1mo14SexXUmlVAebLNuKKr9OcOFD89RiMH03AY3eJL09d3Pbvb/V+AVYsQiBROkqqAhYe2lDojp++ZAPDx2RM9rJrD+1qYyUUbdUyKzIJXrU09u4tST9NdhER08njP2tMydTYWx0ZWRfX/p90uj/Yn9x/bcRTK6REaUg/GJT6uUKh7KfnXmxAtt0RI9WNjVPQFFjS1WFGtrRI43/VqyS0gnfsjmiov6fyrE+0aGBxJIzBNWupROE+AYw9LFkJ0gRN6KhsqvawIobvSPbVH+OaYanwnIV8q34LyTRujMzvJL+ke0hEfucf6eChYWe3O5kGCRD09oDnBzBLYnZotRjtuDb2eiHksj28kNuHJTlWItLA4A5Xjri7I1FmnCnTYezZfS2EHHazgOwfYAx+RMTSDXkdjrfradWo4kQFlERljYr1fXTh0T9s19r9FJTeao5/4UbUqcAW8mu71LoIQ5i2gJLDEp4d7xBEBaSznQ2TI4DSNW13lGlTXx8Ma47sFk4uxcxNy1S56RC1bPXA/iJGudxQrGMlhrYuwYcbEpKqEAqRB3xCZKV0M/69hlcZTreu3+1LbtYpLBFQ9GGMPC5FMjzVt29UFSVFyChB6PJlfVrpXbyvlq7ZFKWPc77HKIUyVhx5cSuI19pMxoTPiK5FfcuD7NeUJISK2loWzM/Cd5kvjqCZf0mGJ4zs9iwAQrkhpBGr07lwyAKJ0wH4ybZIdFXb69uZHnp9YnibYF6cuq5L+66lNPRicm1ojF46Sc6SkiVeZDfS6J1f2UOL1ymEMi3eH7pc8+AQ5JUn7XJWr8xIcYTlBa4HkJkRV7ire2Daij3cNywrcVv1GuReHLyW+UipWGPKrvY8IONHmkLEuAgdU9WupbmVdt24Cjn2s1n/ecIIKIVm9xgvdd5n4DHXKsOOWY03gp43g/5jgTJdl1PNwaVIvnwC1zMchAL5Ld49im8pcZbYiQC/MQqAdixxpORPZ0i6j0TM86K7P6DgSxmMNP/SG4vDx0m9mxvCIzvyevNl69Rc2yRToAwY1yGHMHyT2LwWr1NDhhW620ALR/u8gycvRhICYmISCwuCEBuSK+2UyKuKHk50gCr+xfLenxYshOJC+3dyGgBKXMkh/T8i0vKIBaKX5LcD0BY+msO4h/vrb4dMB61qzxCuJM8ax6O5tuQc4u5WOi/6XrAIRFTCqLMST8U6JKN689s70FJtvQYm0DpbPfYTOfeA53B5fphfsTMQqXFwKPhVLczCoWftmlLhHb/NcmNmCHnTp/Mm9yObyNsiG3oQ1Wbb1a9eMOcJ5y/Wvpi0RSYGwIfJcIIknvJIwPphZ3AJ3K9x/M89kct/J65XZMAMdnM1FbtLRpgKUVAUIUJ/E6V03QP/ElUHHukYjbXABWs/fJ/6uy9E4aXjbmzJQ6I9VKQ1uUsT2Oh8585HoXp6LLiFxADdRSIllJBtuMCmgfrd06qQ/q9wu8xFzvJYBeIT6xlCbsBXgdm";
@@ -63,6 +68,27 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
   String _currentLocaleId = "";
   List<LocaleName> _localeNames = [];
   final SpeechToText speech = SpeechToText();
+  List<String> stringList = [];
+
+  FlutterTts flutterTts;
+  TtsState ttsState = TtsState.stopped;
+  get isPlaying => ttsState == TtsState.playing;
+  get isStopped => ttsState == TtsState.stopped;
+  get isPaused => ttsState == TtsState.paused;
+  get isContinued => ttsState == TtsState.continued;
+  dynamic languages;
+  String language = 'en-US';
+  double volume = 0.5;
+  double pitch = 1.0;
+  double rate = 0.5;
+
+  double _maxAngle = 0;
+  double _angleThreshold = 45;
+  double _prevAngle = 0;
+  double _currAngle = 0;
+  List<double> _startTimes = [];
+  List<double> _endTimes = [];
+  List<double> _angles = [];
 
 
   @override
@@ -80,6 +106,7 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
 
     Wakelock.enable();
     initSpeechState();
+    initTts();
   }
 
   Future<void> initSpeechState() async {
@@ -99,6 +126,89 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
 
   }
 
+  initTts() {
+    flutterTts = FlutterTts();
+    flutterTts.setLanguage(language);
+
+    flutterTts.setStartHandler(() {
+//      setState(() {
+        print("Playing");
+        ttsState = TtsState.playing;
+//      });
+    });
+
+    flutterTts.setCompletionHandler(() {
+//      setState(() {
+        print("Complete");
+        ttsState = TtsState.stopped;
+        startListening();
+        if(stringList.last.toLowerCase().contains('start') &&  !_isRecording){
+          _toggleRecording();
+        }else if(stringList.last.toLowerCase().contains('stop') &&  _isRecording){
+          _toggleRecording();
+
+        }
+//        restartListening();
+
+
+//      });
+    });
+
+    flutterTts.setCancelHandler(() {
+//      setState(() {
+        print("Cancel");
+        ttsState = TtsState.stopped;
+//      });
+    });
+
+    if (Platform.isIOS) {
+      flutterTts.setPauseHandler(() {
+//        setState(() {
+          print("Paused");
+          ttsState = TtsState.paused;
+//        });
+      });
+
+      flutterTts.setContinueHandler(() {
+//        setState(() {
+          print("Continued");
+          ttsState = TtsState.continued;
+//        });
+      });
+    }
+
+    flutterTts.setErrorHandler((msg) {
+//      setState(() {
+        print("error: $msg");
+        ttsState = TtsState.stopped;
+//      });
+    });
+//    _speak("Knee Exercise");
+  }
+
+  Future _getLanguages() async {
+    languages = await flutterTts.getLanguages;
+    print(languages);
+    if (languages != null) setState(() => languages);
+  }
+
+  Future _speak(String voiceText) async {
+    cancelListening();
+
+//    stopListening();
+    await flutterTts.setVolume(volume);
+    await flutterTts.setSpeechRate(rate);
+    await flutterTts.setPitch(pitch);
+
+    if (voiceText != null) {
+      if (voiceText.isNotEmpty) {
+        var result = await flutterTts.speak(voiceText);
+        if (result == 1) {
+          ttsState = TtsState.playing;
+        }
+      }
+    }
+  }
 
   @override
   void dispose() {
@@ -192,8 +302,13 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
         color: Colors.white60,
         child: Row(
           mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
             Text(displayString, style: Theme.of(context).textTheme.headline3,),
+            Expanded(
+              child: Container(),
+            ),
+            Text('Reps: ${_angles.length}', style: Theme.of(context).textTheme.headline3,)
           ],
         )
     );
@@ -205,31 +320,7 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
       textColor: Colors.white,
       child: Text(_isRecording?'Stop Rec':'Start Rec'),
       onPressed: _toggleRecording
-//          ()async{
-//
-//
-//        _isRecording = !_isRecording;
-//
-//        if(_isRecording){
-//          print('Recording Start');
-//        }else {
-////            print(angleList);
-//          print('Recording Stop');
-//          String fileName = DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
-//
-//          String csv = const ListToCsvConverter().convert(angleList);
-//          final directory = await getApplicationDocumentsDirectory();
-//          final pathOfTheFileToWrite = '${directory.path}/$fileName.csv';
-//          File file = File(pathOfTheFileToWrite);
-//          file.writeAsString(csv);
-//
-//          print(csv);
-//
-//        }
-//        setState(() {
-//
-//        });
-//      },
+
     );
   }
 
@@ -239,11 +330,16 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
 
     if(_isRecording){
       print('Recording Start');
+//      _speak('exercise start');
     }else {
 //            print(angleList);
       print('Recording Stop');
       String fileName = 'Knee ' + DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
-
+      if(widget.rightLeg){
+        fileName = 'Right ' + fileName;
+      }else{
+        fileName = 'Left ' + fileName;
+      }
       String csv = const ListToCsvConverter().convert(angleList);
       final directory = await getApplicationDocumentsDirectory();
       final pathOfTheFileToWrite = '${directory.path}/$fileName.csv';
@@ -263,7 +359,8 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
   void updateDisplay(Map<String, dynamic> jsonObject){
 
 //    print('${DateTime.now().minute}:${DateTime.now().second}:${DateTime.now().millisecond}: $trackedJoint: $hipTrackingData');
-    displayString = 'Knee Angle:  ${hipTrackingData[2]}';
+
+    displayString = 'Knee Angle:  ${hipTrackingData[2].toInt()}';
 
     double timeElapsed;
     if(dataList.isEmpty){
@@ -279,11 +376,8 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
     if(_isRecording){
       angleList.add(hipTrackingData);
       angleList.last.insert(0, timeElapsed);
-//      print('$hipTrackingData, ${hipTrackingData.runtimeType}');
+      detectExercise(angleList.last);
     }
-
-
-
 
     seriesList = [
       charts.Series<TimeSeriesAngle, double>(
@@ -301,6 +395,34 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
     });
 
 
+  }
+
+  void detectExercise(List data){
+//    _maxAngle = 0;
+
+    _currAngle = data[3];
+    if(_currAngle>_angleThreshold && _prevAngle<_angleThreshold){
+      _startTimes.add(data[0]);
+      print('start time: $_startTimes');
+    }
+    if(_startTimes.length>_endTimes.length && _maxAngle<_currAngle){
+      _maxAngle = _currAngle;
+//      print(_maxAngle);
+
+    }
+
+    if(_currAngle<_angleThreshold && _prevAngle>_angleThreshold){
+      _endTimes.add(data[0]);
+      _angles.add(_maxAngle);
+      _maxAngle = 0;
+      print('end time: $_endTimes');
+      print('angles: $_angles');
+    }
+
+
+
+
+    _prevAngle = _currAngle;
   }
 
 
@@ -328,6 +450,11 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
       switch(jsonObject["action"]) {
         case "get_data":
           hipTrackingData = List<dynamic>.from(jsonObject["data"]);
+          if(widget.rightLeg){
+            hipTrackingData = hipTrackingData.map( (number) => number * -1).toList();
+//            print('$hipTrackingData, $listnew');
+
+          }
           trackedJoint = jsonObject["name"];
 
 
@@ -439,9 +566,20 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
 
   void stopListening() {
     speech.stop();
-    setState(() {
+//    setState(() {
       level = 0.0;
+//    });
+  }
+
+  void restartListening() {
+    Future.delayed(const Duration(seconds: 5), () {
+      speech.stop().then((value){
+        level = 0.0;
+        startListening();
+      });
+
     });
+
   }
 
   void cancelListening() {
@@ -452,18 +590,35 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
   }
 
   void resultListener(SpeechRecognitionResult result) {
-    List<String> stringList = result.recognizedWords.split(' ');
+    stringList = result.recognizedWords.split(' ');
 
     print(stringList);
     if(stringList.length>0){
       if(stringList.last.toLowerCase().contains('start') &&  !_isRecording){
-        _toggleRecording();
+        _speak('exercise start');
+//        _toggleRecording();
       }else if(stringList.last.toLowerCase().contains('stop') &&  _isRecording){
-        _toggleRecording();
+//        _toggleRecording();
+        _speak('exercise stop');
 
       }else if(stringList.last.toLowerCase().contains('back')){
 //        cancelListening();
         Navigator.of(context).pop();
+
+      }else if(stringList.last.toLowerCase().contains('hello')){
+        print('hello');
+//        cancelListening();
+        _speak('exercise 1 2 3 4 5');
+
+//        speech.stop();
+//        Future.delayed(const Duration(seconds: 3), (){
+//          _speak('exercise 1 2 3 4 5');
+//
+//        });
+
+
+
+//        _speak('exercise stop');
 
       }
     }
@@ -485,10 +640,11 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
 class ArViewWidget extends StatefulWidget {
 
   final Sample sample;
+  final bool rightLeg;
 
   ArViewWidget({
     Key key,
-    @required this.sample,
+    @required this.sample, this.rightLeg,
   });
 
   @override

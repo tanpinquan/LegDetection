@@ -7,6 +7,7 @@
       <root url="file://$PROJECT_DIR$/plugin/augmented_reality_plugin_wikitude" />
       <root url="file://$USER_HOME$/Development/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_macos-0.0.4+2" />
       <root url="file://$USER_HOME$/Development/flutter/.pub-cache/hosted/pub.dartlang.org/speech_to_text-2.2.0" />
+      <root url="file://$USER_HOME$/Development/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_tts-1.2.3" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

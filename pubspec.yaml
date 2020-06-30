@@ -17,6 +17,7 @@ dependencies:
   charts_flutter: ^0.9.0
   csv: ^4.0.3
   speech_to_text: ^2.2.0
+  flutter_tts: ^1.2.3
 
   augmented_reality_plugin_wikitude:
     path: ./plugin/augmented_reality_plugin_wikitude/

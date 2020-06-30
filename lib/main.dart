@@ -221,10 +221,17 @@ class MyAppState extends State<MainMenu> {
 
     widgetList.addAll([
       ListTile(
-          title: Text('Track Knee Exercise (say: \'knee flexion\')'),
+          title: Text('Right Knee Flexion'),
           trailing: Icon(Icons.arrow_forward_ios),
           onTap: (){
-            _pushArView(arConfig);
+            _pushArView(arConfig, true);
+          }
+      ),
+      ListTile(
+          title: Text('Left Knee Flexion'),
+          trailing: Icon(Icons.arrow_forward_ios),
+          onTap: (){
+            _pushArView(arConfig, false);
           }
       ),
       ListTile(
@@ -290,7 +297,7 @@ class MyAppState extends State<MainMenu> {
     return await WikitudePlugin.requestARPermissions(features);
   }
 
-  Future<void> _pushArView(Sample sample) async {
+  Future<void> _pushArView(Sample sample, bool rightLeg) async {
     WikitudeResponse supportedResponse = await _isDeviceSupporting(sample.requiredFeatures);
 
     if(supportedResponse.success) {
@@ -301,7 +308,7 @@ class MyAppState extends State<MainMenu> {
 
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => ArViewWidget(sample: sample)),
+          MaterialPageRoute(builder: (context) => ArViewWidget(sample: sample, rightLeg: rightLeg,)),
         ).then((value){
           getFiles();
           startListening();
@@ -429,8 +436,10 @@ class MyAppState extends State<MainMenu> {
     print(stringList);
 //    print(result.alternates);
     if(stringList.length>1){
-      if(stringList[stringList.length-2].toLowerCase().contains('knee') && stringList.last.contains('flexion')){
-        _pushArView(arConfig);
+      if(stringList[stringList.length-3].toLowerCase().contains('right') && stringList[stringList.length-2].toLowerCase().contains('knee') && stringList.last.contains('flexion')){
+        _pushArView(arConfig, true);
+      }else if(stringList[stringList.length-3].toLowerCase().contains('left') && stringList[stringList.length-2].toLowerCase().contains('knee') && stringList.last.contains('flexion')){
+        _pushArView(arConfig, false);
       }else if(stringList[stringList.length-2].toLowerCase().contains('shoulder') && stringList.last.contains('flexion')){
         _pushArmTrackingView(arConfig);
 
