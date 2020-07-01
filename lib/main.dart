@@ -66,6 +66,7 @@ class MyApp extends StatelessWidget {
     ));
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
 //        primaryColor: Color(0xffffb300),
 //        primaryColorDark: Color(0xfffb8c00),
@@ -235,10 +236,17 @@ class MyAppState extends State<MainMenu> {
           }
       ),
       ListTile(
-          title: Text('Track Shoulder Exercise (say: \'shoulder flexion\')'),
+          title: Text('Right Shoulder Flexion'),
           trailing: Icon(Icons.arrow_forward_ios),
           onTap: (){
-            _pushArmTrackingView(arConfig);
+            _pushArmTrackingView(arConfig, true);
+          }
+      ),
+      ListTile(
+          title: Text('Left Shoulder Flexion'),
+          trailing: Icon(Icons.arrow_forward_ios),
+          onTap: (){
+            _pushArmTrackingView(arConfig, false);
           }
       ),
       Divider(height: 0,),
@@ -321,7 +329,7 @@ class MyAppState extends State<MainMenu> {
     }
   }
 
-  Future<void> _pushArmTrackingView(Sample sample) async {
+  Future<void> _pushArmTrackingView(Sample sample, bool rightSide) async {
     WikitudeResponse supportedResponse = await _isDeviceSupporting(sample.requiredFeatures);
 
     if(supportedResponse.success) {
@@ -332,7 +340,7 @@ class MyAppState extends State<MainMenu> {
 
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => ArmTrackingViewWidget(sample: sample)),
+          MaterialPageRoute(builder: (context) => ArmTrackingViewWidget(sample: sample, rightSide: rightSide,)),
         ).then((value){
           getFiles();
           startListening();
@@ -440,8 +448,8 @@ class MyAppState extends State<MainMenu> {
         _pushArView(arConfig, true);
       }else if(stringList[stringList.length-3].toLowerCase().contains('left') && stringList[stringList.length-2].toLowerCase().contains('knee') && stringList.last.contains('flexion')){
         _pushArView(arConfig, false);
-      }else if(stringList[stringList.length-2].toLowerCase().contains('shoulder') && stringList.last.contains('flexion')){
-        _pushArmTrackingView(arConfig);
+      }else if(stringList[stringList.length-3].toLowerCase().contains('right') && stringList[stringList.length-2].toLowerCase().contains('shoulder') && stringList.last.contains('flexion')){
+        _pushArmTrackingView(arConfig, true);
 
       }
     }

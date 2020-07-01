@@ -9,6 +9,12 @@
       <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/augmented_reality_plugin_wikitude/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/augmented_reality_plugin_wikitude/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/augmented_reality_plugin_wikitude/build" />
+      <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/flutter_tts/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/flutter_tts/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/flutter_tts/build" />
+      <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/flutter_tts/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/flutter_tts/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/flutter_tts/example/build" />
       <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/location/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/location/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/location/build" />

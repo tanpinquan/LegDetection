@@ -38,12 +38,11 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
   String loadPath = "";
   List<dynamic> hipTrackingData = [];
   String trackedJoint = "";
-  String displayString = "No detections";
+  String displayString = "Knee Angle";
 
   List<List<dynamic>> angleList = [];
   List timeList = [];
   List<TimeSeriesAngle> dataList = [];
-  //List<charts.Series<TimeSeriesAngle, DateTime>> seriesList = [];
   List<charts.Series<TimeSeriesAngle, double>> seriesList = [];
   DateTime startTime;
 
@@ -294,12 +293,13 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
   }
 
   Widget _displayText(){
-    if(hipTrackingData.isEmpty){
-      return Container();
-    }
+//    if(hipTrackingData.isEmpty){
+//      return Container();
+//    }
 
     return Container(
         color: Colors.white60,
+        padding: EdgeInsets.symmetric(horizontal: 8.0),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.end,
@@ -376,7 +376,7 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
     if(_isRecording){
       angleList.add(hipTrackingData);
       angleList.last.insert(0, timeElapsed);
-      detectExercise(angleList.last);
+      _detectExercise(angleList.last);
     }
 
     seriesList = [
@@ -397,7 +397,7 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
 
   }
 
-  void detectExercise(List data){
+  void _detectExercise(List data){
 //    _maxAngle = 0;
 
     _currAngle = data[3];
@@ -407,7 +407,6 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
     }
     if(_startTimes.length>_endTimes.length && _maxAngle<_currAngle){
       _maxAngle = _currAngle;
-//      print(_maxAngle);
 
     }
 
@@ -451,8 +450,8 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
         case "get_data":
           hipTrackingData = List<dynamic>.from(jsonObject["data"]);
           if(widget.rightLeg){
-            hipTrackingData = hipTrackingData.map( (number) => number * -1).toList();
-//            print('$hipTrackingData, $listnew');
+//            hipTrackingData = hipTrackingData.map( (number) => number * -1).toList();
+            hipTrackingData[2] = hipTrackingData[2] * -1;
 
           }
           trackedJoint = jsonObject["name"];

@@ -18,11 +18,11 @@
 		</data>
 		<key>Assets.car</key>
 		<data>
-		+rgXnBwSu95aik/FPRHN++hFTw0=
+		i160Ge7DUmEprq5ZcjT8jOOcp4E=
 		</data>
 		<key>Base.lproj/LaunchScreen.storyboardc/01J-lp-oVM-view-Ze5-6b-2t3.nib</key>
 		<data>
-		blyi9vPqYOTAr7uPlkim43xkAN4=
+		gMnpzvhUFcMVFeoUiRZkup3+7Lk=
 		</data>
 		<key>Base.lproj/LaunchScreen.storyboardc/Info.plist</key>
 		<data>
@@ -30,11 +30,11 @@
 		</data>
 		<key>Base.lproj/LaunchScreen.storyboardc/UIViewController-01J-lp-oVM.nib</key>
 		<data>
-		ekMvXSMDfdw6bwG8Od5E+MUDNr8=
+		ZamyTKB/fFaFiR9Zc686QCMHrMA=
 		</data>
 		<key>Base.lproj/Main.storyboardc/BYZ-38-t0r-view-8bC-Xf-vdC.nib</key>
 		<data>
-		uSMVoWoiTsVkfFsRKOGG6z1SsaY=
+		4oH6VY4AGQ/Nyv96VCxzGa1oHtc=
 		</data>
 		<key>Base.lproj/Main.storyboardc/Info.plist</key>
 		<data>
@@ -42,11 +42,11 @@
 		</data>
 		<key>Base.lproj/Main.storyboardc/UIViewController-BYZ-38-t0r.nib</key>
 		<data>
-		TwvE80F7CTO4cy4Xz2FyySneVzI=
+		wGpGtQLW2Gj5MASCa+aY2qXvA1I=
 		</data>
 		<key>Frameworks/App.framework/App</key>
 		<data>
-		bMh1ejFWpIk6sCdaykZZT+El/C0=
+		cfuZFBmxaR0sswjxmYKR52DTYKQ=
 		</data>
 		<key>Frameworks/App.framework/Info.plist</key>
 		<data>
@@ -54,7 +54,7 @@
 		</data>
 		<key>Frameworks/App.framework/_CodeSignature/CodeResources</key>
 		<data>
-		4y2X2rfoPE017PurKZJmPwiteyw=
+		0OdVr19KTDyfkA1o72Kk2GHblOw=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.json</key>
 		<data>
@@ -66,7 +66,7 @@
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/LICENSE</key>
 		<data>
-		blIEE7V3si2gU1uo6t2nvdT2KWo=
+		nNNu7rgKA/A37MESzMtE6ZfbykQ=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/fonts/MaterialIcons-Regular.ttf</key>
 		<data>
@@ -78,7 +78,7 @@
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/kernel_blob.bin</key>
 		<data>
-		RyNkUWPPVFPSzJnIRWTmQ3rQnwg=
+		vvpTLxjfnJHoUmnhujzeXfiUOSQ=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
 		<data>
@@ -166,7 +166,7 @@
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/samples/01_ImageTracking_2_DifferentTargets/assets/tracker_leg_arm.wtc</key>
 		<data>
-		bRCBL2TDDW8MTBwKir93FPRMpuI=
+		JfZ4VZWZgjSUN5m+brNB3/wmGd8=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/samples/01_ImageTracking_2_DifferentTargets/assets/tracker_small.wtc</key>
 		<data>
@@ -178,11 +178,11 @@
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/samples/01_ImageTracking_2_DifferentTargets/index.html</key>
 		<data>
-		yrrQF2udr/gzXjNLhGJrjwMhTdA=
+		fUcGq6ZfJ7cbeWWEK2bkm65xYcI=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/samples/01_ImageTracking_2_DifferentTargets/js/multipletargets.js</key>
 		<data>
-		1RAN6c9OJ0lG+9mW+xkPV5WjQsE=
+		up73I0owCRSJ2i8b61ziqFWbbHU=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/samples/01_ImageTracking_3_Interactivity/assets/bike.png</key>
 		<data>
@@ -3022,7 +3022,7 @@
 		</data>
 		<key>Frameworks/Flutter.framework/Flutter</key>
 		<data>
-		TgrYvzhR9SDMjFVfIaQ4c5qIITE=
+		6gX/o4d4iVzFW1JsaR0DJiaZLV8=
 		</data>
 		<key>Frameworks/Flutter.framework/Info.plist</key>
 		<data>
@@ -3042,7 +3042,7 @@
 		</data>
 		<key>Frameworks/WikitudeSDK.framework/WikitudeSDK</key>
 		<data>
-		07eH5rPn2Nu2UNtM0sC6N9DDZYA=
+		zp3T/EkE+OgJm6oskVNOaJuk2s8=
 		</data>
 		<key>Frameworks/WikitudeSDK.framework/_CodeSignature/CodeResources</key>
 		<data>
@@ -3066,7 +3066,7 @@
 		</data>
 		<key>Frameworks/augmented_reality_plugin_wikitude.framework/augmented_reality_plugin_wikitude</key>
 		<data>
-		mHkPIdV7f9ymCoBzqcFzuBHRBOk=
+		ozVAl7rNDHcWvtLYmvizh5xzYDA=
 		</data>
 		<key>Frameworks/libswiftCore.dylib</key>
 		<data>
@@ -3110,7 +3110,7 @@
 		</data>
 		<key>Frameworks/location.framework/location</key>
 		<data>
-		1GqLjqvi2X3sfHbOmPFLTrLhIEQ=
+		hnLu0UoIx+iWRmEVI2L4ScaEG8U=
 		</data>
 		<key>Frameworks/path_provider.framework/Info.plist</key>
 		<data>
@@ -3122,7 +3122,7 @@
 		</data>
 		<key>Frameworks/path_provider.framework/path_provider</key>
 		<data>
-		UBE+bbqv7Y1TQi9w9OD1NOtk5o8=
+		qi4/ZP9xmRdlRE1g0q1V+Kkf8Hc=
 		</data>
 		<key>Frameworks/speech_to_text.framework/Info.plist</key>
 		<data>
@@ -3134,7 +3134,7 @@
 		</data>
 		<key>Frameworks/speech_to_text.framework/speech_to_text</key>
 		<data>
-		rjMDcuYzv3SuzEPD+pczO+jtEEY=
+		757Xo9O681zvaJ9jBV2hY1GRDS0=
 		</data>
 		<key>Frameworks/wakelock.framework/Info.plist</key>
 		<data>
@@ -3146,7 +3146,7 @@
 		</data>
 		<key>Frameworks/wakelock.framework/wakelock</key>
 		<data>
-		ESpKDRl3q+QEolgwgC5c7PpdFH8=
+		vty0AsOn7rh3Wqpt6K74N+wR0Og=
 		</data>
 		<key>Info.plist</key>
 		<data>
@@ -3188,14 +3188,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			oaAMsOU/COgWFK14yiCmEP+Mwm58b/hei55tyC2oQjg=
+			eQ2ofDJ2kjrXPPGA5jk2iolTFd3qGYz/9YWPAoRhXA8=
 			</data>
 		</dict>
 		<key>Base.lproj/LaunchScreen.storyboardc/01J-lp-oVM-view-Ze5-6b-2t3.nib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			2sghrCnm2BJS2xr/Q1CmOXs92cwrsrQxvUl3i7fWktE=
+			wjHLkazc7exiZ/zzF+HP7HOdY+Fcsxp8oiDEVihDF/4=
 			</data>
 		</dict>
 		<key>Base.lproj/LaunchScreen.storyboardc/Info.plist</key>
@@ -3209,14 +3209,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			ArmONGKnJN/+4p52/7ZS+1GoI7f53JyHHrHgcPIczKE=
+			8N5Vot1IutWkPQPZeSW4n0nvuqUoDepxIq6A5rIsR5c=
 			</data>
 		</dict>
 		<key>Base.lproj/Main.storyboardc/BYZ-38-t0r-view-8bC-Xf-vdC.nib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			M+K+gK/tq7cUgO1R0yniI7n9jNvTHkO0Kcy3wTqlPLE=
+			jvkA6lqE7GRGc+NvLf1xdWCEEwPQWzPUTeEHz19S1nU=
 			</data>
 		</dict>
 		<key>Base.lproj/Main.storyboardc/Info.plist</key>
@@ -3230,14 +3230,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			o2PIaVQxIl/Y6ZSTa0G2wcCsSe/LPGX58lmQusapU1Q=
+			dhLmEbSsZm3nXKpx40Jj+icWldMOdNVXTs4aS+E70o8=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/App</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			vktLBCkuauSfqtTCVkhbIJtj0mR2vWOmZuDF6cC4vJc=
+			EdWaa0jKYWv4iFOFUTrJ/FUYUqysSpAMT/oBzi8292M=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/Info.plist</key>
@@ -3251,7 +3251,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			xAp82E+54gbcC8514YJZHpv9rT2UKXD7oSlwF2GKwzQ=
+			0qP0h0OLfHQ4qQUprDRJeR9nZSl0Q7kcxeVFiXOx884=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.json</key>
@@ -3272,7 +3272,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			1YFsHjhuUYSrZbYcpCKEyAuG2BYh9wRWHKtn5GY7WCY=
+			4JjD6HjWh7GYG7CQS01JLZHCTUqRbiewy8YbGM3h2mo=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/fonts/MaterialIcons-Regular.ttf</key>
@@ -3293,7 +3293,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			pj3ezOMO4j9JXJ7oQ4O0Q7+EAwAAQNKeiu0FR898Vdo=
+			4aurhCh0+L0LBJtXJG4zyjBshfwDKLrYSSTzRLWetbY=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
@@ -3433,7 +3433,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			Dnq1FQKDdJvZbqk6wqRLdMg6z3DgRubZxq/c7zsfLM4=
+			kAdgdZpYNUrzIhAiOaNEkXGFGdOIFZLlAiNdaCDtQdY=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/samples/01_ImageTracking_2_DifferentTargets/assets/tracker_small.wtc</key>
@@ -3454,14 +3454,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			X7fhNQP0q5YKX0mgUPZCR6f8stWCJ/GUZRbxIkP8Vj4=
+			n+Y8wvMpECcDSwLlbEjEz1uVE3GqWEfErOvXvwR3HDI=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/samples/01_ImageTracking_2_DifferentTargets/js/multipletargets.js</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			VEul8MX/2dHSMyfl7oKEOySULLmH5QAxiJwXCgWB4QA=
+			jMsHXobiDTV4AJK/mR6wBXfB/+HNCBYufH+hbu3P/FQ=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/samples/01_ImageTracking_3_Interactivity/assets/bike.png</key>
@@ -8431,7 +8431,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			mQFYREI4Inj6WAM1S06JvvN9536CcWUlbZQWqGs8RD0=
+			SucSo9vmyATV3MlwtXjhSPP67JTYVNSVfdWkD+nFQS8=
 			</data>
 		</dict>
 		<key>Frameworks/Flutter.framework/Info.plist</key>
@@ -8466,7 +8466,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			tMayLNGp1H6iYVZ4iLq4JIWfIja1BVxvI8Jz5vhz19g=
+			z/Ckmz3Af7t5I3Pdv7ZBkF/QlsBDHrBlSO/+HdPXHoQ=
 			</data>
 		</dict>
 		<key>Frameworks/WikitudeSDK.framework/_CodeSignature/CodeResources</key>
@@ -8508,7 +8508,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			TbqvD6KtOMjoUX6qOOuRJyNULqafKAKQ5uVP9WXysew=
+			VWT6XftMktUy0ZC5LAyQIL5dt1+iaeMS+qm3cD9GXhk=
 			</data>
 		</dict>
 		<key>Frameworks/libswiftCore.dylib</key>
@@ -8585,7 +8585,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			HqVdfiQyFnP+F92kfVGSSAhqRgEds9baWi43099gk2k=
+			n8JZSBuypUJcNXEXGz+Vaxk3j9OAh7yj1Ew9NRgCGWE=
 			</data>
 		</dict>
 		<key>Frameworks/path_provider.framework/Info.plist</key>
@@ -8606,7 +8606,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			Z9W85Il7Q3ZMa4Lq80YxX3pkYBAM0G1rLY75DAeMUH4=
+			XdMojrHwMDN8IAqqiWnnXy5gLhsn/mLMMk+89Zq4WAo=
 			</data>
 		</dict>
 		<key>Frameworks/speech_to_text.framework/Info.plist</key>
@@ -8627,7 +8627,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			TfjMUuyyChnfR2YgGGcWC3ArF7nR2PJ/QE4iXb8qpIs=
+			7bzAbTY63N/prxztr2k/uHdFANSHtgQrP9CQ+GlOHDE=
 			</data>
 		</dict>
 		<key>Frameworks/wakelock.framework/Info.plist</key>
@@ -8648,7 +8648,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			haOYGpPyjyczxR9ZHe0gkTy1P+HOZCvVJap2de5CmSA=
+			HSNvU6Umh8iv88WokXoCCLesBtMS+BZ46hfygZsnicA=
 			</data>
 		</dict>
 		<key>embedded.mobileprovision</key>

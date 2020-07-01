@@ -30,10 +30,11 @@ import 'package:speech_to_text/speech_recognition_result.dart';
 class ArmTrackingViewWidget extends StatefulWidget {
 
   final Sample sample;
+  final bool rightSide;
 
   ArmTrackingViewWidget({
     Key key,
-    @required this.sample,
+    @required this.sample, this.rightSide,
   });
 
   @override
@@ -48,6 +49,7 @@ class ArmTrackingViewState extends State<ArmTrackingViewWidget> with WidgetsBind
   String loadPath = "";
   List<dynamic> upperArmTrackingData = [];
   List<dynamic> lowerArmTrackingData = [];
+
 
   String trackedJoint = "";
   String displayStringUpper = "Upper Arm Angle:";
@@ -83,6 +85,19 @@ class ArmTrackingViewState extends State<ArmTrackingViewWidget> with WidgetsBind
   List<LocaleName> _localeNames = [];
   final SpeechToText speech = SpeechToText();
 
+
+  double _maxAngle = 0;
+  double _angleThreshold = 45;
+  double _prevUpperArmAngle = 0;
+  double _currUpperArmAngle = 0;
+  double _prevLowerArmAngle = 0;
+  double _currLowerArmAngle = 0;
+  List<double> _startTimes = [];
+  List<double> _endTimes = [];
+  List<double> _angles = [];
+
+  double _prevAngle = 0;
+  double _currAngle = 0;
 
   @override
   void initState() {
@@ -203,12 +218,11 @@ class ArmTrackingViewState extends State<ArmTrackingViewWidget> with WidgetsBind
   }
 
   Widget _displayText(){
-//    if(upperArmTrackingData.isEmpty){
-//      return Container();
-//    }
+
 
     return Container(
         color: Colors.white60,
+        padding: EdgeInsets.symmetric(horizontal: 8.0),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
@@ -220,6 +234,10 @@ class ArmTrackingViewState extends State<ArmTrackingViewWidget> with WidgetsBind
 
               ],
             ),
+            Expanded(
+              child: Container(),
+            ),
+            Text('Reps: ${_angles.length}', style: Theme.of(context).textTheme.headline3,)
           ],
         )
     );
@@ -280,6 +298,8 @@ class ArmTrackingViewState extends State<ArmTrackingViewWidget> with WidgetsBind
       angleList.add(upperArmTrackingData);
       angleList.last.insert(0, timeElapsed);
       angleList.last.add(0);
+      _detectExercise(angleList.last);
+
 
     }
 
@@ -348,6 +368,30 @@ class ArmTrackingViewState extends State<ArmTrackingViewWidget> with WidgetsBind
     });
   }
 
+  void _detectExercise(List data){
+//    _maxAngle = 0;
+
+    _currAngle = data[3];
+    if(_currAngle>_angleThreshold && _prevAngle<_angleThreshold){
+      _startTimes.add(data[0]);
+      print('start time: $_startTimes');
+    }
+    if(_startTimes.length>_endTimes.length && _maxAngle<_currAngle){
+      _maxAngle = _currAngle;
+
+    }
+
+    if(_currAngle<_angleThreshold && _prevAngle>_angleThreshold){
+      _endTimes.add(data[0]);
+      _angles.add(_maxAngle);
+      _maxAngle = 0;
+      print('end time: $_endTimes');
+      print('angles: $_angles');
+    }
+
+
+    _prevAngle = _currAngle;
+  }
 
 
   Future<void> onArchitectWidgetCreated() async {
@@ -370,13 +414,36 @@ class ArmTrackingViewState extends State<ArmTrackingViewWidget> with WidgetsBind
           trackedJoint = jsonObject["name"];
           if(trackedJoint == 'image_upper_arm'){
             upperArmTrackingData = List<dynamic>.from(jsonObject["data"]);
+            if(widget.rightSide){
+              upperArmTrackingData[2] = upperArmTrackingData[2] * -1;
+
+            }
+            // Unwrap angle
+            _currUpperArmAngle = upperArmTrackingData[2];
+            if((_prevUpperArmAngle>0 && _currUpperArmAngle<-90) || (_prevUpperArmAngle>180 && _currUpperArmAngle<-90)){
+              upperArmTrackingData[2] = upperArmTrackingData[2] + 360;
+            }
+            _prevUpperArmAngle = upperArmTrackingData[2];
+
             updateDisplayUpper();
           }else if(trackedJoint == 'image_lower_arm'){
             lowerArmTrackingData = List<dynamic>.from(jsonObject["data"]);
+
+            if(widget.rightSide){
+              lowerArmTrackingData[2] = lowerArmTrackingData[2] * -1;
+
+            }
+
+            // Unwrap angle
+            _currLowerArmAngle = lowerArmTrackingData[2];
+            if((_prevLowerArmAngle>0 && _currLowerArmAngle<-90) || (_prevLowerArmAngle>180 && _currLowerArmAngle<-90)){
+              lowerArmTrackingData[2] = lowerArmTrackingData[2] + 360;
+            }
+            _prevLowerArmAngle = lowerArmTrackingData[2];
             updateDisplayLower();
 
-          }
 
+          }
 
 
           break;
@@ -385,19 +452,7 @@ class ArmTrackingViewState extends State<ArmTrackingViewWidget> with WidgetsBind
     }
   }
 
-  Future<void> captureScreen() async {
-    WikitudeResponse captureScreenResponse = await this.architectWidget.captureScreen(true, "");
-    if(captureScreenResponse.success) {
-      showSingleButtonDialog("Success", "Image saved in: " + captureScreenResponse.message, "OK");
-    } else {
-      if(captureScreenResponse.message.contains("permission")) {
-        showDialogOpenAppSettings("Error", captureScreenResponse.message);
-      }
-      else {
-        showSingleButtonDialog("Error", captureScreenResponse.message, "Ok");
-      }
-    }
-  }
+
 
   void showSingleButtonDialog(String title, String content, final String buttonText) {
     showDialog(
@@ -419,32 +474,7 @@ class ArmTrackingViewState extends State<ArmTrackingViewWidget> with WidgetsBind
     );
   }
 
-  void showDialogOpenAppSettings(String title, String content) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(title),
-            content: Text(content),
-            actions: <Widget>[
-              FlatButton(
-                child: const Text('Cancel'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              FlatButton(
-                child: const Text('Open settings'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  WikitudePlugin.openAppSettings();
-                },
-              )
-            ],
-          );
-        }
-    );
-  }
+
 
   Future<void> onLoadSuccess() async {
 

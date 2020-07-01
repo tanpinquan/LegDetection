@@ -70,9 +70,9 @@ var World = {
             certain group of targets.
         */
         this.pageOne = new AR.ImageTrackable(this.tracker, "*", {
-            // drawables: {
-            //     cam: overlayOne
-            // },
+//             drawables: {
+//                 cam: overlayOne
+//             },
             onImageRecognized: function(target) {
 
                 AR.platform.sendJSONObject({
@@ -83,12 +83,22 @@ var World = {
                 var imgOverlay = new AR.ImageResource("assets/" + target.name + ".png", {
                     onError: World.onError
                 });
+
+                var translateX = 0.0;
+                var translateY = 0.0
+                var scale = 0.75;
+
+                if (target.name === 'image_body'){
+                    translateX = -0.50;
+                    translateY = 0.30;
+                    scale = 0.25
+                }
                 var overlay = new AR.ImageDrawable(imgOverlay, 1, {
                     translate: {
-                        x: 0.0,
-                        y: 0.
+                        x: translateX,
+                        y: translateY
                     },
-                    scale: 0.75
+                    scale: scale
                 });
 
                 this.addImageTargetCamDrawables(target, overlay);
@@ -113,7 +123,7 @@ var World = {
                 }
 
 
-                World.hideInfoBar();
+                // World.hideInfoBar();
 
             },
 
@@ -155,12 +165,12 @@ var World = {
         alert(error);
     },
 
-    hideInfoBar: function hideInfoBarFn() {
-        document.getElementById("infoBox").style.display = "none";
-    },
+    // hideInfoBar: function hideInfoBarFn() {
+    //     document.getElementById("infoBox").style.display = "none";
+    // },
 
     showInfoBar: function worldLoadedFn() {
-        document.getElementById("infoBox").style.display = "table";
+        // document.getElementById("infoBox").style.display = "table";
         document.getElementById("loadingMessage").style.display = "none";
     }
 };

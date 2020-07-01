@@ -33,6 +33,11 @@ class _PlotViewState extends State<PlotView> {
   List<double> _startTimes = [];
   List<double> _endTimes = [];
   List<double> _angles = [];
+  double _averageAngle = 0;
+
+  double _maxAngleKnee = 0;
+  double _maxAngleShoulder = 0;
+  double _shoulderAngleThreshold = 45;
 
 
   File file;
@@ -60,7 +65,9 @@ class _PlotViewState extends State<PlotView> {
       ),
       body: Column(
         children: <Widget>[
+          _buildExerciseSummary(),
           _buildChart(),
+//          _buildChart2(),
 
           Container(
             padding: EdgeInsets.symmetric(vertical: 8),
@@ -95,11 +102,15 @@ class _PlotViewState extends State<PlotView> {
       for (final data in loadedData){
         if(data.last==0) {
           upperArmDataList.add(TimeSeriesAngle(data[0], data[3]));
+
+          detectShoulderExercise(data);
         }else {
           lowerArmDataList.add(TimeSeriesAngle(data[0], data[3]));
         }
 
       }
+      _averageAngle =  _angles.reduce((a,b) => a + b) / _angles.length;
+
       seriesList1 = [
         charts.Series<TimeSeriesAngle, double>(
           id: 'Upper Arm',
@@ -121,31 +132,12 @@ class _PlotViewState extends State<PlotView> {
         kneeDataList.add(TimeSeriesAngle(data[0], data[3]));
         kneeDataList2.add(TimeSeriesAngle(data[0], data[1]));
         kneeDataList3.add(TimeSeriesAngle(data[0], data[2]));
-
-        _currAngle = data[3];
-        if(_currAngle<_angleThreshold && _prevAngle>_angleThreshold){
-          _startTimes.add(data[0]);
-          print(_startTimes);
-        }
-
-        if(_currAngle>_angleThreshold && _prevAngle<_angleThreshold){
-          _endTimes.add(data[0]);
-          _angles.add(maxAngle);
-          maxAngle = 0;
-          print(_endTimes);
-          print(_angles);
-        }
-
-        if(_startTimes.length>_endTimes.length && maxAngle>_currAngle){
-          maxAngle = _currAngle;
-
-        }
-
-
-        _prevAngle = _currAngle;
+        detectKneeExercise(data);
 
 
       }
+      _averageAngle =  _angles.reduce((a,b) => a + b) / _angles.length;
+
       seriesList1 = [
         charts.Series<TimeSeriesAngle, double>(
           id: 'Knee Angle',
@@ -181,19 +173,108 @@ class _PlotViewState extends State<PlotView> {
 
   }
 
+  void detectShoulderExercise(List data){
+    _currAngle = data[3];
+    if(_currAngle>_shoulderAngleThreshold && _prevAngle<_shoulderAngleThreshold){
+      _startTimes.add(data[0]);
+      print(_startTimes);
+    }
+
+    if(_currAngle<_shoulderAngleThreshold && _prevAngle>_shoulderAngleThreshold){
+      _endTimes.add(data[0]);
+      _angles.add(_maxAngleShoulder);
+      _maxAngleShoulder = 0;
+      print(_endTimes);
+      print(_angles);
+    }
+
+    if(_startTimes.length>_endTimes.length && _maxAngleShoulder<_currAngle){
+      _maxAngleShoulder = _currAngle;
+
+    }
+
+
+    _prevAngle = _currAngle;
+  }
+
+
+  void detectKneeExercise(List data){
+    _currAngle = data[3];
+    if(_currAngle<_angleThreshold && _prevAngle>_angleThreshold){
+      _startTimes.add(data[0]);
+      print(_startTimes);
+    }
+
+    if(_currAngle>_angleThreshold && _prevAngle<_angleThreshold){
+      _endTimes.add(data[0]);
+      _angles.add(_maxAngleKnee);
+      _maxAngleKnee = 0;
+      print(_endTimes);
+      print(_angles);
+    }
+
+    if(_startTimes.length>_endTimes.length && _maxAngleKnee>_currAngle){
+      _maxAngleKnee = _currAngle;
+
+    }
+
+
+    _prevAngle = _currAngle;
+  }
+
+  Widget _buildExerciseSummary(){
+    if(_endTimes.isEmpty){
+      return Container();
+    }
+    double averageInterval = (_endTimes.last - _startTimes.first)/_endTimes.length;
+    return Container(
+      padding: EdgeInsets.all(8.0),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        children: <Widget>[
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text('Exercise Summary', style: Theme.of(context).textTheme.headline6,),
+              Text('Repetitions : ${_angles.length}'),
+              Text('Average Interval ${averageInterval.toString().substring(0,4)}s'),
+              Text('Average Angle: ${_averageAngle.toString().substring(0,6)}°')
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildChart(){
     return Container(
-      height: 300,
-      child: charts.LineChart(
-        seriesList1,
-        animate: true,
-        defaultRenderer: new charts.LineRendererConfig(includePoints: true),
-        behaviors: [charts.SeriesLegend(), charts.PanAndZoomBehavior()],
-        primaryMeasureAxis: charts.NumericAxisSpec(
+      padding: EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Divider(),
+          Text('Angle Plots', style: Theme.of(context).textTheme.headline6,),
+          Container(
+            height: 300,
+            child: charts.LineChart(
+              seriesList1,
+              animate: true,
+              defaultRenderer: new charts.LineRendererConfig(includePoints: true),
+              behaviors: [charts.SeriesLegend(),],
+//        behaviors: [charts.SeriesLegend(), charts.PanAndZoomBehavior()],
 
-            viewport: charts.NumericExtents(-180,180)
-        ),
+              primaryMeasureAxis: charts.NumericAxisSpec(
+                  tickProviderSpec: new charts.BasicNumericTickProviderSpec(zeroBound: false)
+//            viewport: charts.NumericExtents(-180,180)
+              ),
+              domainAxis: charts.NumericAxisSpec(
+                  tickProviderSpec: new charts.BasicNumericTickProviderSpec(zeroBound: false)
+//            viewport: charts.NumericExtents(-180,180)
+              ),
 
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -205,10 +286,13 @@ class _PlotViewState extends State<PlotView> {
         seriesList2,
         animate: true,
         defaultRenderer: new charts.LineRendererConfig(includePoints: true),
-        behaviors: [charts.SeriesLegend(), charts.PanAndZoomBehavior()],
-        primaryMeasureAxis: charts.NumericAxisSpec(
+        behaviors: [charts.SeriesLegend()],
+//        behaviors: [charts.SeriesLegend(), charts.PanAndZoomBehavior()],
 
-            viewport: charts.NumericExtents(-180,180)
+        primaryMeasureAxis: charts.NumericAxisSpec(
+            tickProviderSpec: new charts.BasicNumericTickProviderSpec(zeroBound: false)
+
+//            viewport: charts.NumericExtents(-180,180)
         ),
 
       ),
