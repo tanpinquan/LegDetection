@@ -27,14 +27,14 @@ class _PlotViewState extends State<PlotView> {
   List<TimeSeriesAngle> lowerArmDataList = [];
   bool _isShoulder = false;
 
-  double _angleThreshold = -45;
+  double _kneeAngleThreshold = 45;
   double _prevAngle = 0;
   double _currAngle = 0;
   List<double> _startTimes = [];
   List<double> _endTimes = [];
   List<double> _angles = [];
   double _averageAngle = 0;
-
+  double averageInterval = 0;
   double _maxAngleKnee = 0;
   double _maxAngleShoulder = 0;
   double _shoulderAngleThreshold = 45;
@@ -95,7 +95,7 @@ class _PlotViewState extends State<PlotView> {
     List<List<dynamic>> loadedData =CsvToListConverter().convert(contents);
 //    print(loadedData);
     _isShoulder = loadedData[0].length == 8;
-    print(_isShoulder);
+    print('SHOULDER: $_isShoulder');
     double maxAngle = 0;
 
     if(_isShoulder){
@@ -136,7 +136,9 @@ class _PlotViewState extends State<PlotView> {
 
 
       }
-      _averageAngle =  _angles.reduce((a,b) => a + b) / _angles.length;
+      calculateExerciseStats();
+
+
 
       seriesList1 = [
         charts.Series<TimeSeriesAngle, double>(
@@ -200,12 +202,12 @@ class _PlotViewState extends State<PlotView> {
 
   void detectKneeExercise(List data){
     _currAngle = data[3];
-    if(_currAngle<_angleThreshold && _prevAngle>_angleThreshold){
+    if(_currAngle>_kneeAngleThreshold && _prevAngle<_kneeAngleThreshold){
       _startTimes.add(data[0]);
       print(_startTimes);
     }
 
-    if(_currAngle>_angleThreshold && _prevAngle<_angleThreshold){
+    if(_currAngle<_kneeAngleThreshold && _prevAngle>_kneeAngleThreshold){
       _endTimes.add(data[0]);
       _angles.add(_maxAngleKnee);
       _maxAngleKnee = 0;
@@ -213,7 +215,7 @@ class _PlotViewState extends State<PlotView> {
       print(_angles);
     }
 
-    if(_startTimes.length>_endTimes.length && _maxAngleKnee>_currAngle){
+    if(_startTimes.length>_endTimes.length && _maxAngleKnee<_currAngle){
       _maxAngleKnee = _currAngle;
 
     }
@@ -222,11 +224,21 @@ class _PlotViewState extends State<PlotView> {
     _prevAngle = _currAngle;
   }
 
-  Widget _buildExerciseSummary(){
-    if(_endTimes.isEmpty){
-      return Container();
+  void calculateExerciseStats(){
+    if(_angles.isNotEmpty) {
+      _averageAngle = _angles.reduce((a, b) => a + b) / _angles.length;
+      averageInterval = (_endTimes.last - _startTimes.first)/_endTimes.length;
+      print(averageInterval);
     }
-    double averageInterval = (_endTimes.last - _startTimes.first)/_endTimes.length;
+  }
+
+  Widget _buildExerciseSummary(){
+//    if(_endTimes.isEmpty){
+//      return Container();
+//    }
+//    double averageInterval = (_endTimes.last - _startTimes.first)/_endTimes.length;
+
+    print(averageInterval);
     return Container(
       padding: EdgeInsets.all(8.0),
       child: Row(
@@ -237,8 +249,8 @@ class _PlotViewState extends State<PlotView> {
             children: <Widget>[
               Text('Exercise Summary', style: Theme.of(context).textTheme.headline6,),
               Text('Repetitions : ${_angles.length}'),
-              Text('Average Interval ${averageInterval.toString().substring(0,4)}s'),
-              Text('Average Angle: ${_averageAngle.toString().substring(0,6)}°')
+              Text('Average Interval ${averageInterval.toStringAsFixed(2)}s'),
+              Text('Average Angle: ${_averageAngle.toStringAsFixed(2)}°')
             ],
           ),
         ],

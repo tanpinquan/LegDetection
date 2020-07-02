@@ -26,6 +26,9 @@ import 'package:speech_to_text/speech_to_text.dart';
 import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 
+import 'package:flutter_tts/flutter_tts.dart';
+
+enum TtsState { playing, stopped, paused, continued }
 
 class ArmTrackingViewWidget extends StatefulWidget {
 
@@ -85,6 +88,20 @@ class ArmTrackingViewState extends State<ArmTrackingViewWidget> with WidgetsBind
   List<LocaleName> _localeNames = [];
   final SpeechToText speech = SpeechToText();
 
+  List<String> stringList = [];
+
+  FlutterTts flutterTts;
+  TtsState ttsState = TtsState.stopped;
+  get isPlaying => ttsState == TtsState.playing;
+  get isStopped => ttsState == TtsState.stopped;
+  get isPaused => ttsState == TtsState.paused;
+  get isContinued => ttsState == TtsState.continued;
+  dynamic languages;
+  String language = 'en-US';
+  double volume = 0.5;
+  double pitch = 1.0;
+  double rate = 0.5;
+
 
   double _maxAngle = 0;
   double _angleThreshold = 45;
@@ -114,6 +131,8 @@ class ArmTrackingViewState extends State<ArmTrackingViewWidget> with WidgetsBind
 
     Wakelock.enable();
     initSpeechState();
+    initTts();
+
   }
 
   Future<void> initSpeechState() async {
@@ -282,7 +301,7 @@ class ArmTrackingViewState extends State<ArmTrackingViewWidget> with WidgetsBind
 
   void updateDisplayUpper(){
 
-    displayStringUpper = 'Upper Arm Angle:  ${upperArmTrackingData[2]}';
+    displayStringUpper = 'Upper Arm Angle:  ${upperArmTrackingData[2].toInt()}';
 
     double timeElapsed;
     if(dataListUpper.isEmpty && dataListLower.isEmpty){
@@ -327,7 +346,7 @@ class ArmTrackingViewState extends State<ArmTrackingViewWidget> with WidgetsBind
 
   void updateDisplayLower(){
 
-    displayStringLower = 'Lower Arm Angle:  ${lowerArmTrackingData[2]}';
+    displayStringLower = 'Lower Arm Angle:  ${lowerArmTrackingData[2].toInt()Hi Prof T}';
 
     double timeElapsed;
     if(dataListUpper.isEmpty && dataListLower.isEmpty){
@@ -528,21 +547,41 @@ class ArmTrackingViewState extends State<ArmTrackingViewWidget> with WidgetsBind
   }
 
   void resultListener(SpeechRecognitionResult result) {
-    List<String> stringList = result.recognizedWords.split(' ');
+
+    stringList = result.recognizedWords.split(' ');
 
     print(stringList);
     if(stringList.length>0){
       if(stringList.last.toLowerCase().contains('start') &&  !_isRecording){
-        _toggleRecording();
+        _speak('exercise start');
       }else if(stringList.last.toLowerCase().contains('stop') &&  _isRecording){
-        _toggleRecording();
+        _speak('exercise stop');
 
       }else if(stringList.last.toLowerCase().contains('back')){
-//        cancelListening();
         Navigator.of(context).pop();
+
+      }else if(stringList.last.toLowerCase().contains('hello')){
+        print('hello');
+        _speak('exercise 1 2 3 4 5');
 
       }
     }
+
+//    stringList = result.recognizedWords.split(' ');
+//
+//    print(stringList);
+//    if(stringList.length>0){
+//      if(stringList.last.toLowerCase().contains('start') &&  !_isRecording){
+//        _toggleRecording();
+//      }else if(stringList.last.toLowerCase().contains('stop') &&  _isRecording){
+//        _toggleRecording();
+//
+//      }else if(stringList.last.toLowerCase().contains('back')){
+////        cancelListening();
+//        Navigator.of(context).pop();
+//
+//      }
+//    }
 
 
 
@@ -556,6 +595,92 @@ class ArmTrackingViewState extends State<ArmTrackingViewWidget> with WidgetsBind
       this.level = level;
     });
   }
+
+  initTts() {
+    flutterTts = FlutterTts();
+    flutterTts.setLanguage(language);
+
+    flutterTts.setStartHandler(() {
+//      setState(() {
+      print("Playing");
+      ttsState = TtsState.playing;
+//      });
+    });
+
+    flutterTts.setCompletionHandler(() {
+//      setState(() {
+      print("Complete");
+      ttsState = TtsState.stopped;
+      startListening();
+      if(stringList.last.toLowerCase().contains('start') &&  !_isRecording){
+        _toggleRecording();
+      }else if(stringList.last.toLowerCase().contains('stop') &&  _isRecording){
+        _toggleRecording();
+
+      }
+//        restartListening();
+
+
+//      });
+    });
+
+    flutterTts.setCancelHandler(() {
+//      setState(() {
+      print("Cancel");
+      ttsState = TtsState.stopped;
+//      });
+    });
+
+    if (Platform.isIOS) {
+      flutterTts.setPauseHandler(() {
+//        setState(() {
+        print("Paused");
+        ttsState = TtsState.paused;
+//        });
+      });
+
+      flutterTts.setContinueHandler(() {
+//        setState(() {
+        print("Continued");
+        ttsState = TtsState.continued;
+//        });
+      });
+    }
+
+    flutterTts.setErrorHandler((msg) {
+//      setState(() {
+      print("error: $msg");
+      ttsState = TtsState.stopped;
+//      });
+    });
+//    _speak("Knee Exercise");
+  }
+
+  Future _getLanguages() async {
+    languages = await flutterTts.getLanguages;
+    print(languages);
+    if (languages != null) setState(() => languages);
+  }
+
+  Future _speak(String voiceText) async {
+    cancelListening();
+
+//    stopListening();
+    await flutterTts.setVolume(volume);
+    await flutterTts.setSpeechRate(rate);
+    await flutterTts.setPitch(pitch);
+
+    if (voiceText != null) {
+      if (voiceText.isNotEmpty) {
+        var result = await flutterTts.speak(voiceText);
+        if (result == 1) {
+          ttsState = TtsState.playing;
+        }
+      }
+    }
+  }
+
+
 }
 
 

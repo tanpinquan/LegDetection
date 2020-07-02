@@ -595,34 +595,18 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
     if(stringList.length>0){
       if(stringList.last.toLowerCase().contains('start') &&  !_isRecording){
         _speak('exercise start');
-//        _toggleRecording();
       }else if(stringList.last.toLowerCase().contains('stop') &&  _isRecording){
-//        _toggleRecording();
         _speak('exercise stop');
 
       }else if(stringList.last.toLowerCase().contains('back')){
-//        cancelListening();
         Navigator.of(context).pop();
 
       }else if(stringList.last.toLowerCase().contains('hello')){
         print('hello');
-//        cancelListening();
         _speak('exercise 1 2 3 4 5');
-
-//        speech.stop();
-//        Future.delayed(const Duration(seconds: 3), (){
-//          _speak('exercise 1 2 3 4 5');
-//
-//        });
-
-
-
-//        _speak('exercise stop');
 
       }
     }
-
-
 
   }
 
