@@ -346,7 +346,7 @@ class ArmTrackingViewState extends State<ArmTrackingViewWidget> with WidgetsBind
 
   void updateDisplayLower(){
 
-    displayStringLower = 'Lower Arm Angle:  ${lowerArmTrackingData[2].toInt()Hi Prof T}';
+    displayStringLower = 'Lower Arm Angle:  ${lowerArmTrackingData[2].tInt()}';
 
     double timeElapsed;
     if(dataListUpper.isEmpty && dataListLower.isEmpty){
