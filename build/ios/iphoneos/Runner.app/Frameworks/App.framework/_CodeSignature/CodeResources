@@ -10,7 +10,7 @@
 		</data>
 		<key>flutter_assets/AssetManifest.json</key>
 		<data>
-		T1YQrArRbdVWCjpN7YEL8R/cpJk=
+		aCNgCUYiUVVpiQBPs8ujaCTWJMw=
 		</data>
 		<key>flutter_assets/FontManifest.json</key>
 		<data>
@@ -18,7 +18,7 @@
 		</data>
 		<key>flutter_assets/LICENSE</key>
 		<data>
-		nNNu7rgKA/A37MESzMtE6ZfbykQ=
+		hSY/h5v7+wWnlHIfGosFNiORKA8=
 		</data>
 		<key>flutter_assets/fonts/MaterialIcons-Regular.ttf</key>
 		<data>
@@ -30,7 +30,7 @@
 		</data>
 		<key>flutter_assets/kernel_blob.bin</key>
 		<data>
-		IKWj5ybfALRZWwUPd4uivp/vQjA=
+		GShoZ5SZCJbD1VtvsbiEIFLCNZ0=
 		</data>
 		<key>flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
 		<data>
@@ -118,7 +118,7 @@
 		</data>
 		<key>flutter_assets/samples/01_ImageTracking_2_DifferentTargets/assets/tracker_leg_arm.wtc</key>
 		<data>
-		JfZ4VZWZgjSUN5m+brNB3/wmGd8=
+		Py8cS70Am3ukMD544NIzpAgHIIM=
 		</data>
 		<key>flutter_assets/samples/01_ImageTracking_2_DifferentTargets/assets/tracker_small.wtc</key>
 		<data>
@@ -2968,6 +2968,18 @@
 		<data>
 		CDtHBUWcWLx43QH17yyTuKqWipI=
 		</data>
+		<key>flutter_assets/sounds/exercise_rep.mp3</key>
+		<data>
+		fipGdlagYyV+G0NumH8YlNolM6A=
+		</data>
+		<key>flutter_assets/sounds/start_rec.mp3</key>
+		<data>
+		jm+VfCgRiAIYlfajZq2r8TsI0ew=
+		</data>
+		<key>flutter_assets/sounds/stop_rec.mp3</key>
+		<data>
+		bBw7s84TiymiaBr55rbbqrgOHkc=
+		</data>
 		<key>flutter_assets/vm_snapshot_data</key>
 		<data>
 		yYi4BJdGlIFJfw4GiO1LmGm+lCo=
@@ -2979,7 +2991,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			EhT2QAnsT7Cg35b3VZqJzqF2fixd8/Oyk7/pPI4cReI=
+			wcOeUCek/tItuEps+uxmYsqBxHnyCjwvzYIntEq9xVA=
 			</data>
 		</dict>
 		<key>flutter_assets/FontManifest.json</key>
@@ -2993,7 +3005,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			4JjD6HjWh7GYG7CQS01JLZHCTUqRbiewy8YbGM3h2mo=
+			w1s1/iOy6c0he7yiws4Db/NM+pUefUc2l9vBFXhbFMw=
 			</data>
 		</dict>
 		<key>flutter_assets/fonts/MaterialIcons-Regular.ttf</key>
@@ -3014,7 +3026,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			3p6rDxiPNrOXi2/MvSibmZRm7cu1YUFL8zJ0l8txE7c=
+			YWky9DGYuAgvTvgZ66qEMSp6x3mv9+2YWPSTNw2tX1Q=
 			</data>
 		</dict>
 		<key>flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
@@ -3154,7 +3166,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			kAdgdZpYNUrzIhAiOaNEkXGFGdOIFZLlAiNdaCDtQdY=
+			rlCArl5D8VZ+nBwS+dNsxnGlabbOxT5F6Y7IGCU2sXE=
 			</data>
 		</dict>
 		<key>flutter_assets/samples/01_ImageTracking_2_DifferentTargets/assets/tracker_small.wtc</key>
@@ -8139,6 +8151,27 @@
 			<key>hash2</key>
 			<data>
 			S3a/TN9r/SBrk/UF+hD4lQLVM8Q0twc9VY96jsndkVk=
+			</data>
+		</dict>
+		<key>flutter_assets/sounds/exercise_rep.mp3</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			aTI13X+XEbYfakDbT2E/3iXuBLraYTroPI++2mAjAHI=
+			</data>
+		</dict>
+		<key>flutter_assets/sounds/start_rec.mp3</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			tsqpiBYjMF2IHODFbwrOlR6UVKz5UAo/MCAwC2ylstU=
+			</data>
+		</dict>
+		<key>flutter_assets/sounds/stop_rec.mp3</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			O41HyVkRJH/827RP4REYUtRHz+8h7Z3VLnJXdnHlMfM=
 			</data>
 		</dict>
 		<key>flutter_assets/vm_snapshot_data</key>

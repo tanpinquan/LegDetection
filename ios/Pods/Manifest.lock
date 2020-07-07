@@ -10,6 +10,12 @@ PODS:
     - Flutter
   - path_provider_macos (0.0.1):
     - Flutter
+  - soundpool (0.0.1):
+    - Flutter
+  - soundpool_macos (0.0.1):
+    - Flutter
+  - soundpool_web (0.0.1):
+    - Flutter
   - speech_to_text (0.0.1):
     - Flutter
   - wakelock (0.0.1):
@@ -22,6 +28,9 @@ DEPENDENCIES:
   - location (from `.symlinks/plugins/location/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - path_provider_macos (from `.symlinks/plugins/path_provider_macos/ios`)
+  - soundpool (from `.symlinks/plugins/soundpool/ios`)
+  - soundpool_macos (from `.symlinks/plugins/soundpool_macos/ios`)
+  - soundpool_web (from `.symlinks/plugins/soundpool_web/ios`)
   - speech_to_text (from `.symlinks/plugins/speech_to_text/ios`)
   - wakelock (from `.symlinks/plugins/wakelock/ios`)
 
@@ -38,6 +47,12 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/path_provider/ios"
   path_provider_macos:
     :path: ".symlinks/plugins/path_provider_macos/ios"
+  soundpool:
+    :path: ".symlinks/plugins/soundpool/ios"
+  soundpool_macos:
+    :path: ".symlinks/plugins/soundpool_macos/ios"
+  soundpool_web:
+    :path: ".symlinks/plugins/soundpool_web/ios"
   speech_to_text:
     :path: ".symlinks/plugins/speech_to_text/ios"
   wakelock:
@@ -50,6 +65,9 @@ SPEC CHECKSUMS:
   location: 3a2eed4dd2fab25e7b7baf2a9efefe82b512d740
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   path_provider_macos: f760a3c5b04357c380e2fddb6f9db6f3015897e0
+  soundpool: c7f4422ca206e77f8900ed3c4ee6a6ff5a0e38a9
+  soundpool_macos: 36b3b9047369167e8b68ef1e1b6f25fb7c893825
+  soundpool_web: bd713866c1993a5bfd40bfc875e7ebb30cbe8342
   speech_to_text: 41b068d5f61fe3abe7e2bb0296250cf996e45417
   wakelock: 0d4a70faf8950410735e3f61fb15d517c8a6efc4
 

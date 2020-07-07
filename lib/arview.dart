@@ -27,6 +27,9 @@ import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:soundpool/soundpool.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/foundation.dart';
 
 
 enum TtsState { playing, stopped, paused, continued }
@@ -89,6 +92,10 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
   List<double> _endTimes = [];
   List<double> _angles = [];
 
+  Soundpool _soundpool;
+  Future<int> _startSoundId;
+  Future<int> _stopSoundId;
+  int _startSoundStreamId;
 
   @override
   void initState() {
@@ -106,7 +113,31 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
     Wakelock.enable();
     initSpeechState();
     initTts();
+    initSoundPool();
   }
+
+  void initSoundPool(){
+    _soundpool = Soundpool();
+//    _startSoundId = await rootBundle.load("sounds/start_rec.mp3").then((ByteData soundData) {
+//
+//      return _soundpool.load(soundData);
+//    });
+    _startSoundId = _loadStartSound();
+    print('soundid $_startSoundId');
+
+
+  }
+  Future<int> _loadStartSound() async {
+    var asset = await rootBundle.load("sounds/start_rec.mp3");
+    return await _soundpool.load(asset);
+  }
+
+  Future<void> _playStartSound() async {
+    var _alarmSound =  await _startSoundId;
+    print(_alarmSound);
+    _startSoundStreamId = await _soundpool.play(_alarmSound);
+  }
+
 
   Future<void> initSpeechState() async {
     bool hasSpeech = await speech.initialize(
@@ -185,11 +216,7 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
 //    _speak("Knee Exercise");
   }
 
-  Future _getLanguages() async {
-    languages = await flutterTts.getLanguages;
-    print(languages);
-    if (languages != null) setState(() => languages);
-  }
+
 
   Future _speak(String voiceText) async {
     cancelListening();
@@ -262,6 +289,10 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
                       flex: 1,
                       child: _buildToggleRecordingButton()
                     ),
+                    FlatButton(
+                      child: Text('press'),
+                      onPressed: _playStartSound,
+                    )
 
                   ],
                 ),
@@ -350,7 +381,7 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
   }
 
   void _toggleRecording()async{
-
+    _playStartSound();
     _isRecording = !_isRecording;
 
     if(_isRecording){

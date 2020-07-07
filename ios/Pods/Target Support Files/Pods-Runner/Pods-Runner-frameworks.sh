@@ -202,6 +202,7 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/augmented_reality_plugin_wikitude/augmented_reality_plugin_wikitude.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/location/location.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/path_provider/path_provider.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/soundpool/soundpool.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/speech_to_text/speech_to_text.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/wakelock/wakelock.framework"
 fi
@@ -211,6 +212,7 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/augmented_reality_plugin_wikitude/augmented_reality_plugin_wikitude.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/location/location.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/path_provider/path_provider.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/soundpool/soundpool.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/speech_to_text/speech_to_text.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/wakelock/wakelock.framework"
 fi
@@ -220,6 +222,7 @@ if [[ "$CONFIGURATION" == "Profile" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/augmented_reality_plugin_wikitude/augmented_reality_plugin_wikitude.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/location/location.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/path_provider/path_provider.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/soundpool/soundpool.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/speech_to_text/speech_to_text.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/wakelock/wakelock.framework"
 fi
