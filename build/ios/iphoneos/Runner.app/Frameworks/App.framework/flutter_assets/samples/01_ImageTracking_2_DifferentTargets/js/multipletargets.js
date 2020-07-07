@@ -93,6 +93,12 @@ var World = {
                     translateY = 0.30;
                     scale = 0.25
                 }
+                else if (target.name === 'image_lower_arm'){
+                    scale = 2
+                }
+                else if (target.name === 'image_upper_arm'){
+                    scale = 2
+                }
                 var overlay = new AR.ImageDrawable(imgOverlay, 1, {
                     translate: {
                         x: translateX,

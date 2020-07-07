@@ -195,18 +195,20 @@ class ArmTrackingViewState extends State<ArmTrackingViewWidget> with WidgetsBind
           ),
           Column(
             children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Expanded(
-                      flex: 2,
-                      child: _displayText()
-                  ),
-                  Expanded(
-                      flex: 1,
-                      child: _buildToggleRecordingButton()
-                  ),
+              IntrinsicHeight(
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                        flex: 2,
+                        child: _displayText()
+                    ),
+                    Expanded(
+                        flex: 1,
+                        child: _buildToggleRecordingButton()
+                    ),
 
-                ],
+                  ],
+                ),
               ),
               _buildChart()
             ],
@@ -241,35 +243,59 @@ class ArmTrackingViewState extends State<ArmTrackingViewWidget> with WidgetsBind
 
     return Container(
         color: Colors.white60,
-        padding: EdgeInsets.symmetric(horizontal: 8.0),
+        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(displayStringUpper, style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.blue), ),
-                Text(displayStringLower, style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.green),),
+            Expanded(
+              flex: 4,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(displayStringUpper, style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.blue), ),
+                  Text(displayStringLower, style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.green),),
 
-              ],
+                ],
+              ),
             ),
             Expanded(
               child: Container(),
             ),
-            Text('Reps: ${_angles.length}', style: Theme.of(context).textTheme.headline3,)
+            VerticalDivider(color: Colors.black, thickness: 2, width: 20, indent: 0, endIndent: 0,),
+            Expanded(
+              flex: 4,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text('Reps: ${_angles.length}', style: Theme.of(context).textTheme.headline5,),
+                  Text('Angle: ${_angles.isNotEmpty?_angles.last.toStringAsFixed(0):''}', style: Theme.of(context).textTheme.headline5,)
+                ],
+              ),
+            )
           ],
         )
     );
   }
 
   Widget _buildToggleRecordingButton(){
-    return FlatButton(
+    return GestureDetector(
+      child: Container(
+        height: double.infinity,
         color: _isRecording ? Colors.red : Colors.green,
-        textColor: Colors.white,
-        child: Text(_isRecording?'Stop Rec':'Start Rec'),
-        onPressed: _toggleRecording
-
+        child: Center(child: Text(_isRecording?'Stop Rec':'Start Rec', style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.white),)),
+      ),
+      onTap: _toggleRecording,
     );
+
+
+//    return FlatButton(
+//
+//        color: _isRecording ? Colors.red : Colors.green,
+//        textColor: Colors.white,
+//        child: Text(_isRecording?'Stop Rec':'Start Rec'),
+//        onPressed: _toggleRecording
+//
+//    );
   }
 
   void _toggleRecording()async{
@@ -281,8 +307,12 @@ class ArmTrackingViewState extends State<ArmTrackingViewWidget> with WidgetsBind
     }else {
 //            print(angleList);
       print('Recording Stop');
-      String fileName = 'Shoulder ' + DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
-
+      String fileName =  DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
+      if(widget.rightSide){
+        fileName = fileName + ' Right Shoulder';
+      }else{
+        fileName = fileName + ' Left Shoulder';
+      }
       String csv = const ListToCsvConverter().convert(angleList);
       final directory = await getApplicationDocumentsDirectory();
       final pathOfTheFileToWrite = '${directory.path}/$fileName.csv';

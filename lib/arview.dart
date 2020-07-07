@@ -251,18 +251,20 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
           ),
           Column(
             children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    flex: 2,
-                    child: _displayText()
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: _buildToggleRecordingButton()
-                  ),
+              IntrinsicHeight(
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      flex: 2,
+                      child: _displayText()
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: _buildToggleRecordingButton()
+                    ),
 
-                ],
+                  ],
+                ),
               ),
               _buildChart()
             ],
@@ -299,29 +301,52 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
 
     return Container(
         color: Colors.white60,
-        padding: EdgeInsets.symmetric(horizontal: 8.0),
+        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
-            Text(displayString, style: Theme.of(context).textTheme.headline3,),
+            Expanded(
+              child: Text(displayString, style: Theme.of(context).textTheme.headline5,),
+              flex: 4,
+
+            ),
             Expanded(
               child: Container(),
             ),
-            Text('Reps: ${_angles.length}', style: Theme.of(context).textTheme.headline3,)
+            VerticalDivider(color: Colors.black, thickness: 2, width: 20, indent: 0, endIndent: 0,),
+            Expanded(
+              flex: 4,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text('Reps: ${_angles.length}', style: Theme.of(context).textTheme.headline5,),
+                  Text('Angle: ${_angles.isNotEmpty?_angles.last.toStringAsFixed(0):''}', style: Theme.of(context).textTheme.headline5,)
+                ],
+              ),
+            )
           ],
         )
     );
   }
 
   Widget _buildToggleRecordingButton(){
-    return FlatButton(
-      color: _isRecording ? Colors.red : Colors.green,
-      textColor: Colors.white,
-      child: Text(_isRecording?'Stop Rec':'Start Rec'),
-      onPressed: _toggleRecording
 
+    return GestureDetector(
+      child: Container(
+        height: double.infinity,
+        color: _isRecording ? Colors.red : Colors.green,
+        child: Center(child: Text(_isRecording?'Stop Rec':'Start Rec', style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.white),)),
+      ),
+      onTap: _toggleRecording,
     );
+//    return FlatButton(
+//      color: _isRecording ? Colors.red : Colors.green,
+//      textColor: Colors.white,
+//      child: Text(_isRecording?'Stop Rec':'Start Rec'),
+//      onPressed: _toggleRecording
+//
+//    );
   }
 
   void _toggleRecording()async{
@@ -334,11 +359,11 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
     }else {
 //            print(angleList);
       print('Recording Stop');
-      String fileName = 'Knee ' + DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
+      String fileName = DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
       if(widget.rightLeg){
-        fileName = 'Right ' + fileName;
+        fileName = fileName +' Right Knee';
       }else{
-        fileName = 'Left ' + fileName;
+        fileName = fileName +' Left Knee';
       }
       String csv = const ListToCsvConverter().convert(angleList);
       final directory = await getApplicationDocumentsDirectory();

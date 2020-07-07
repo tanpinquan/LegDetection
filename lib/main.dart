@@ -189,10 +189,10 @@ class MyAppState extends State<MainMenu> {
     }
     else if(stringList.isEmpty){
       string = 'Say something';
-    }else if(stringList.length==1){
+    }else if(stringList.length<3){
       string = stringList.last.toLowerCase();
     }else{
-      string = stringList.sublist(stringList.length-2).join(" ");
+      string = stringList.sublist(stringList.length-3).join(" ");
     }
 
     return Container(
