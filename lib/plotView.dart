@@ -23,8 +23,14 @@ class _PlotViewState extends State<PlotView> {
 
   List<charts.Series<TimeSeriesAngle, double>> seriesList1 = [];
   List<charts.Series<TimeSeriesAngle, double>> seriesList2 = [];
+  List<charts.Series<TimeSeriesAngle, double>> seriesList3 = [];
+
   List<TimeSeriesAngle> upperArmDataList = [];
   List<TimeSeriesAngle> lowerArmDataList = [];
+  List<TimeSeriesAngle> upperArmDataList2 = [];
+  List<TimeSeriesAngle> lowerArmDataList2 = [];
+  List<TimeSeriesAngle> upperArmDataList3 = [];
+  List<TimeSeriesAngle> lowerArmDataList3 = [];
   bool _isShoulder = false;
 
   double _kneeAngleThreshold = 45;
@@ -63,16 +69,20 @@ class _PlotViewState extends State<PlotView> {
           )
         ],
       ),
-      body: Column(
+      body: ListView(
         children: <Widget>[
           _buildExerciseSummary(),
-          _buildChart(),
+          _buildChart(seriesList1, 'Rotation about Z'),
+          Container(
+              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: Text(_isShoulder?'Shoulder Angles: ' + _angles.join(", ") :'Knee Angles: ' + _angles.join(", "))
+          ),
+          _buildChart(seriesList2,' Rotation about X'),
+          _buildChart(seriesList3,' Rotation about Y'),
+
 //          _buildChart2(),
 
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 8),
-              child: Text('Knee Angles: ' + _angles.join(", "))
-          )
+
 
         ],
       ),
@@ -102,14 +112,20 @@ class _PlotViewState extends State<PlotView> {
       for (final data in loadedData){
         if(data.last==0) {
           upperArmDataList.add(TimeSeriesAngle(data[0], data[3]));
+          upperArmDataList2.add(TimeSeriesAngle(data[0], data[1]));
+          upperArmDataList3.add(TimeSeriesAngle(data[0], data[2]));
 
           detectShoulderExercise(data);
         }else {
           lowerArmDataList.add(TimeSeriesAngle(data[0], data[3]));
+          lowerArmDataList2.add(TimeSeriesAngle(data[0], data[1]));
+          lowerArmDataList3.add(TimeSeriesAngle(data[0], data[2]));
+
         }
 
       }
-      _averageAngle =  _angles.reduce((a,b) => a + b) / _angles.length;
+      calculateExerciseStats();
+//      _averageAngle =  _angles.reduce((a,b) => a + b) / _angles.length;
 
       seriesList1 = [
         charts.Series<TimeSeriesAngle, double>(
@@ -127,6 +143,40 @@ class _PlotViewState extends State<PlotView> {
           data: lowerArmDataList,
         )
       ];
+      seriesList2 = [
+        charts.Series<TimeSeriesAngle, double>(
+          id: 'Upper Arm',
+          colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+          domainFn: (TimeSeriesAngle angle, _) => angle.time,
+          measureFn: (TimeSeriesAngle angle, _) => angle.angle,
+          data: upperArmDataList2,
+        ),
+        charts.Series<TimeSeriesAngle, double>(
+          id: 'Lower Arm',
+          colorFn: (_, __) => charts.MaterialPalette.green.shadeDefault,
+          domainFn: (TimeSeriesAngle angle, _) => angle.time,
+          measureFn: (TimeSeriesAngle angle, _) => angle.angle,
+          data: lowerArmDataList2,
+        )
+      ];
+
+      seriesList3 = [
+        charts.Series<TimeSeriesAngle, double>(
+          id: 'Upper Arm',
+          colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+          domainFn: (TimeSeriesAngle angle, _) => angle.time,
+          measureFn: (TimeSeriesAngle angle, _) => angle.angle,
+          data: upperArmDataList3,
+        ),
+        charts.Series<TimeSeriesAngle, double>(
+          id: 'Lower Arm',
+          colorFn: (_, __) => charts.MaterialPalette.green.shadeDefault,
+          domainFn: (TimeSeriesAngle angle, _) => angle.time,
+          measureFn: (TimeSeriesAngle angle, _) => angle.angle,
+          data: lowerArmDataList3,
+        )
+      ];
+
     }else {
       for (final data in loadedData) {
         kneeDataList.add(TimeSeriesAngle(data[0], data[3]));
@@ -159,6 +209,10 @@ class _PlotViewState extends State<PlotView> {
 //        radiusPxFn: (TimeSeriesAngle angle, _) => 1,
           data: kneeDataList2,
         ),
+
+      ];
+      seriesList3 = [
+
         charts.Series<TimeSeriesAngle, double>(
           id: 'Knee Angle Y',
           colorFn: (_, __) => charts.MaterialPalette.green.shadeDefault,
@@ -258,18 +312,18 @@ class _PlotViewState extends State<PlotView> {
     );
   }
 
-  Widget _buildChart(){
+  Widget _buildChart(List<charts.Series<TimeSeriesAngle, double>> seriesList, String title){
     return Container(
       padding: EdgeInsets.all(8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Divider(),
-          Text('Angle Plots', style: Theme.of(context).textTheme.headline6,),
+          Divider(thickness: 1, color: Colors.black,),
+          Text(title, style: Theme.of(context).textTheme.headline6,),
           Container(
             height: 300,
             child: charts.LineChart(
-              seriesList1,
+              seriesList,
               animate: true,
               defaultRenderer: new charts.LineRendererConfig(includePoints: true),
               behaviors: [charts.SeriesLegend(),],

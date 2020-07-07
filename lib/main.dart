@@ -188,7 +188,7 @@ class MyAppState extends State<MainMenu> {
       string = 'Voice Recognition Disabled';
     }
     else if(stringList.isEmpty){
-      string = 'Say something';
+      string = 'Say something...';
     }else if(stringList.length<3){
       string = stringList.last.toLowerCase();
     }else{
@@ -252,7 +252,7 @@ class MyAppState extends State<MainMenu> {
       Divider(height: 0,),
       Container(height: 50,),
       ListTile(
-        title: Text('View Recordings', style: Theme.of(context).textTheme.subtitle2,),
+        title: Text('View Past Exercise Data', style: Theme.of(context).textTheme.subtitle2,),
         dense: true,
       ),
       Divider(height: 0,),

@@ -55,8 +55,8 @@ class ArmTrackingViewState extends State<ArmTrackingViewWidget> with WidgetsBind
 
 
   String trackedJoint = "";
-  String displayStringUpper = "Upper Arm Angle:";
-  String displayStringLower = "Lower Arm Angle:";
+  String displayStringUpper = "Upper Arm:";
+  String displayStringLower = "Lower Arm:";
 
   List<List<dynamic>> angleList = [];
   List<TimeSeriesAngle> dataListUpper = [];
@@ -331,7 +331,7 @@ class ArmTrackingViewState extends State<ArmTrackingViewWidget> with WidgetsBind
 
   void updateDisplayUpper(){
 
-    displayStringUpper = 'Upper Arm Angle:  ${upperArmTrackingData[2].toInt()}';
+    displayStringUpper = 'Upper Arm:  ${upperArmTrackingData[2].toInt()}';
 
     double timeElapsed;
     if(dataListUpper.isEmpty && dataListLower.isEmpty){
@@ -376,7 +376,7 @@ class ArmTrackingViewState extends State<ArmTrackingViewWidget> with WidgetsBind
 
   void updateDisplayLower(){
 
-    displayStringLower = 'Lower Arm Angle:  ${lowerArmTrackingData[2].tInt()}';
+    displayStringLower = 'Lower Arm:  ${lowerArmTrackingData[2].toInt()}';
 
     double timeElapsed;
     if(dataListUpper.isEmpty && dataListLower.isEmpty){
@@ -488,7 +488,9 @@ class ArmTrackingViewState extends State<ArmTrackingViewWidget> with WidgetsBind
             if((_prevLowerArmAngle>0 && _currLowerArmAngle<-90) || (_prevLowerArmAngle>180 && _currLowerArmAngle<-90)){
               lowerArmTrackingData[2] = lowerArmTrackingData[2] + 360;
             }
+
             _prevLowerArmAngle = lowerArmTrackingData[2];
+
             updateDisplayLower();
 
 
