@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:csv/csv.dart';
+import 'package:soundpool/soundpool.dart';
 import 'package:wikitude_flutter_app/model/timeseries.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
@@ -47,6 +49,10 @@ class _PlotViewState extends State<PlotView> {
 
 
   File file;
+  Soundpool _soundpool;
+  Future<int> _startSoundId;
+  Future<int> _stopSoundId;
+  int _startSoundStreamId;
 
   @override
   Widget build(BuildContext context) {
@@ -71,6 +77,10 @@ class _PlotViewState extends State<PlotView> {
       ),
       body: ListView(
         children: <Widget>[
+//          FlatButton(
+//            child: Text('press'),
+//            onPressed: _playStartSound,
+//          ),
           _buildExerciseSummary(),
           _buildChart(seriesList1, 'Rotation about Z'),
           Container(
@@ -93,7 +103,31 @@ class _PlotViewState extends State<PlotView> {
   void initState() {
     super.initState();
     _loadData();
+//    initSoundPool();
   }
+
+//  void initSoundPool(){
+//    _soundpool = Soundpool();
+////    _startSoundId = await rootBundle.load("sounds/start_rec.mp3").then((ByteData soundData) {
+////
+////      return _soundpool.load(soundData);
+////    });
+//    _startSoundId = _loadStartSound();
+//
+//
+//  }
+//  Future<int> _loadStartSound() async {
+//    print('hello');
+//    var asset = await rootBundle.load("sounds/start_rec.mp3");
+//    print('asset $asset');
+//    return await _soundpool.load(asset);
+//  }
+//
+//  Future<void> _playStartSound() async {
+//    var _alarmSound =  await _startSoundId;
+//    print(_alarmSound);
+//    _startSoundStreamId = await _soundpool.play(_alarmSound);
+//  }
 
   Future<void> _loadData() async {
     final directory = await getApplicationDocumentsDirectory();

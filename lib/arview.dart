@@ -26,13 +26,11 @@ import 'package:speech_to_text/speech_to_text.dart';
 import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 
-import 'package:flutter_tts/flutter_tts.dart';
 import 'package:soundpool/soundpool.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 
 
-enum TtsState { playing, stopped, paused, continued }
 
 class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
   ArchitectWidget architectWidget;
@@ -72,17 +70,7 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
   final SpeechToText speech = SpeechToText();
   List<String> stringList = [];
 
-  FlutterTts flutterTts;
-  TtsState ttsState = TtsState.stopped;
-  get isPlaying => ttsState == TtsState.playing;
-  get isStopped => ttsState == TtsState.stopped;
-  get isPaused => ttsState == TtsState.paused;
-  get isContinued => ttsState == TtsState.continued;
-  dynamic languages;
-  String language = 'en-US';
-  double volume = 0.5;
-  double pitch = 1.0;
-  double rate = 0.5;
+
 
   double _maxAngle = 0;
   double _angleThreshold = 45;
@@ -95,7 +83,8 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
   Soundpool _soundpool;
   Future<int> _startSoundId;
   Future<int> _stopSoundId;
-  int _startSoundStreamId;
+  Future<int> _exerciseSoundId;
+
 
   @override
   void initState() {
@@ -112,17 +101,14 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
 
     Wakelock.enable();
     initSpeechState();
-    initTts();
     initSoundPool();
   }
 
   void initSoundPool(){
     _soundpool = Soundpool();
-//    _startSoundId = await rootBundle.load("sounds/start_rec.mp3").then((ByteData soundData) {
-//
-//      return _soundpool.load(soundData);
-//    });
     _startSoundId = _loadStartSound();
+    _stopSoundId = _loadStopSound();
+    _exerciseSoundId = _loadExerciseSound();
     print('soundid $_startSoundId');
 
 
@@ -135,9 +121,30 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
   Future<void> _playStartSound() async {
     var _alarmSound =  await _startSoundId;
     print(_alarmSound);
-    _startSoundStreamId = await _soundpool.play(_alarmSound);
+    _soundpool.play(_alarmSound);
   }
 
+  Future<int> _loadStopSound() async {
+    var asset = await rootBundle.load("sounds/stop_rec.mp3");
+    return await _soundpool.load(asset);
+  }
+
+  Future<void> _playStopSound() async {
+    var _alarmSound =  await _stopSoundId;
+    print(_alarmSound);
+    await _soundpool.play(_alarmSound);
+  }
+
+  Future<int> _loadExerciseSound() async {
+    var asset = await rootBundle.load("sounds/exercise_rep.mp3");
+    return await _soundpool.load(asset);
+  }
+
+  Future<void> _playExerciseSound() async {
+    var _alarmSound =  await _exerciseSoundId;
+    print(_alarmSound);
+    await _soundpool.play(_alarmSound);
+  }
 
   Future<void> initSpeechState() async {
     bool hasSpeech = await speech.initialize(
@@ -156,85 +163,7 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
 
   }
 
-  initTts() {
-    flutterTts = FlutterTts();
-    flutterTts.setLanguage(language);
 
-    flutterTts.setStartHandler(() {
-//      setState(() {
-        print("Playing");
-        ttsState = TtsState.playing;
-//      });
-    });
-
-    flutterTts.setCompletionHandler(() {
-//      setState(() {
-        print("Complete");
-        ttsState = TtsState.stopped;
-        startListening();
-        if(stringList.last.toLowerCase().contains('start') &&  !_isRecording){
-          _toggleRecording();
-        }else if(stringList.last.toLowerCase().contains('stop') &&  _isRecording){
-          _toggleRecording();
-
-        }
-//        restartListening();
-
-
-//      });
-    });
-
-    flutterTts.setCancelHandler(() {
-//      setState(() {
-        print("Cancel");
-        ttsState = TtsState.stopped;
-//      });
-    });
-
-    if (Platform.isIOS) {
-      flutterTts.setPauseHandler(() {
-//        setState(() {
-          print("Paused");
-          ttsState = TtsState.paused;
-//        });
-      });
-
-      flutterTts.setContinueHandler(() {
-//        setState(() {
-          print("Continued");
-          ttsState = TtsState.continued;
-//        });
-      });
-    }
-
-    flutterTts.setErrorHandler((msg) {
-//      setState(() {
-        print("error: $msg");
-        ttsState = TtsState.stopped;
-//      });
-    });
-//    _speak("Knee Exercise");
-  }
-
-
-
-  Future _speak(String voiceText) async {
-    cancelListening();
-
-//    stopListening();
-    await flutterTts.setVolume(volume);
-    await flutterTts.setSpeechRate(rate);
-    await flutterTts.setPitch(pitch);
-
-    if (voiceText != null) {
-      if (voiceText.isNotEmpty) {
-        var result = await flutterTts.speak(voiceText);
-        if (result == 1) {
-          ttsState = TtsState.playing;
-        }
-      }
-    }
-  }
 
   @override
   void dispose() {
@@ -243,6 +172,7 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
       this.architectWidget.destroy();
     }
     WidgetsBinding.instance.removeObserver(this);
+    _soundpool.dispose();
 
     Wakelock.disable();
     super.dispose();
@@ -289,10 +219,6 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
                       flex: 1,
                       child: _buildToggleRecordingButton()
                     ),
-                    FlatButton(
-                      child: Text('press'),
-                      onPressed: _playStartSound,
-                    )
 
                   ],
                 ),
@@ -381,13 +307,14 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
   }
 
   void _toggleRecording()async{
-    _playStartSound();
     _isRecording = !_isRecording;
 
     if(_isRecording){
+      _playStartSound();
+
       print('Recording Start');
-//      _speak('exercise start');
     }else {
+      _playStopSound();
 //            print(angleList);
       print('Recording Stop');
       String fileName = DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
@@ -472,6 +399,7 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
       _maxAngle = 0;
       print('end time: $_endTimes');
       print('angles: $_angles');
+      _playExerciseSound();
     }
 
 
@@ -650,16 +578,15 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
     print(stringList);
     if(stringList.length>0){
       if(stringList.last.toLowerCase().contains('start') &&  !_isRecording){
-        _speak('exercise start');
+        _toggleRecording();
       }else if(stringList.last.toLowerCase().contains('stop') &&  _isRecording){
-        _speak('exercise stop');
+        _toggleRecording();
 
       }else if(stringList.last.toLowerCase().contains('back')){
         Navigator.of(context).pop();
 
       }else if(stringList.last.toLowerCase().contains('hello')){
         print('hello');
-        _speak('exercise 1 2 3 4 5');
 
       }
     }

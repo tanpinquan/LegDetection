@@ -26,9 +26,9 @@ import 'package:speech_to_text/speech_to_text.dart';
 import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 
-import 'package:flutter_tts/flutter_tts.dart';
-
-enum TtsState { playing, stopped, paused, continued }
+import 'package:soundpool/soundpool.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/foundation.dart';
 
 class ArmTrackingViewWidget extends StatefulWidget {
 
@@ -90,17 +90,6 @@ class ArmTrackingViewState extends State<ArmTrackingViewWidget> with WidgetsBind
 
   List<String> stringList = [];
 
-  FlutterTts flutterTts;
-  TtsState ttsState = TtsState.stopped;
-  get isPlaying => ttsState == TtsState.playing;
-  get isStopped => ttsState == TtsState.stopped;
-  get isPaused => ttsState == TtsState.paused;
-  get isContinued => ttsState == TtsState.continued;
-  dynamic languages;
-  String language = 'en-US';
-  double volume = 0.5;
-  double pitch = 1.0;
-  double rate = 0.5;
 
 
   double _maxAngle = 0;
@@ -115,6 +104,12 @@ class ArmTrackingViewState extends State<ArmTrackingViewWidget> with WidgetsBind
 
   double _prevAngle = 0;
   double _currAngle = 0;
+
+
+  Soundpool _soundpool;
+  Future<int> _startSoundId;
+  Future<int> _stopSoundId;
+  Future<int> _exerciseSoundId;
 
   @override
   void initState() {
@@ -131,7 +126,7 @@ class ArmTrackingViewState extends State<ArmTrackingViewWidget> with WidgetsBind
 
     Wakelock.enable();
     initSpeechState();
-    initTts();
+    initSoundPool();
 
   }
 
@@ -160,6 +155,7 @@ class ArmTrackingViewState extends State<ArmTrackingViewWidget> with WidgetsBind
       this.architectWidget.destroy();
     }
     WidgetsBinding.instance.removeObserver(this);
+    _soundpool.dispose();
 
     Wakelock.disable();
     super.dispose();
@@ -303,9 +299,11 @@ class ArmTrackingViewState extends State<ArmTrackingViewWidget> with WidgetsBind
     _isRecording = !_isRecording;
 
     if(_isRecording){
+      _playStartSound();
       print('Recording Start');
+
     }else {
-//            print(angleList);
+      _playStopSound();
       print('Recording Stop');
       String fileName =  DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
       if(widget.rightSide){
@@ -436,6 +434,7 @@ class ArmTrackingViewState extends State<ArmTrackingViewWidget> with WidgetsBind
       _maxAngle = 0;
       print('end time: $_endTimes');
       print('angles: $_angles');
+      _playExerciseSound();
     }
 
 
@@ -585,35 +584,18 @@ class ArmTrackingViewState extends State<ArmTrackingViewWidget> with WidgetsBind
     print(stringList);
     if(stringList.length>0){
       if(stringList.last.toLowerCase().contains('start') &&  !_isRecording){
-        _speak('exercise start');
+        _toggleRecording();
       }else if(stringList.last.toLowerCase().contains('stop') &&  _isRecording){
-        _speak('exercise stop');
+        _toggleRecording();
 
       }else if(stringList.last.toLowerCase().contains('back')){
         Navigator.of(context).pop();
 
       }else if(stringList.last.toLowerCase().contains('hello')){
         print('hello');
-        _speak('exercise 1 2 3 4 5');
 
       }
     }
-
-//    stringList = result.recognizedWords.split(' ');
-//
-//    print(stringList);
-//    if(stringList.length>0){
-//      if(stringList.last.toLowerCase().contains('start') &&  !_isRecording){
-//        _toggleRecording();
-//      }else if(stringList.last.toLowerCase().contains('stop') &&  _isRecording){
-//        _toggleRecording();
-//
-//      }else if(stringList.last.toLowerCase().contains('back')){
-////        cancelListening();
-//        Navigator.of(context).pop();
-//
-//      }
-//    }
 
 
 
@@ -628,89 +610,48 @@ class ArmTrackingViewState extends State<ArmTrackingViewWidget> with WidgetsBind
     });
   }
 
-  initTts() {
-    flutterTts = FlutterTts();
-    flutterTts.setLanguage(language);
-
-    flutterTts.setStartHandler(() {
-//      setState(() {
-      print("Playing");
-      ttsState = TtsState.playing;
-//      });
-    });
-
-    flutterTts.setCompletionHandler(() {
-//      setState(() {
-      print("Complete");
-      ttsState = TtsState.stopped;
-      startListening();
-      if(stringList.last.toLowerCase().contains('start') &&  !_isRecording){
-        _toggleRecording();
-      }else if(stringList.last.toLowerCase().contains('stop') &&  _isRecording){
-        _toggleRecording();
-
-      }
-//        restartListening();
+  void initSoundPool(){
+    _soundpool = Soundpool();
+    _startSoundId = _loadStartSound();
+    _stopSoundId = _loadStopSound();
+    _exerciseSoundId = _loadExerciseSound();
+    print('soundid $_startSoundId');
 
 
-//      });
-    });
-
-    flutterTts.setCancelHandler(() {
-//      setState(() {
-      print("Cancel");
-      ttsState = TtsState.stopped;
-//      });
-    });
-
-    if (Platform.isIOS) {
-      flutterTts.setPauseHandler(() {
-//        setState(() {
-        print("Paused");
-        ttsState = TtsState.paused;
-//        });
-      });
-
-      flutterTts.setContinueHandler(() {
-//        setState(() {
-        print("Continued");
-        ttsState = TtsState.continued;
-//        });
-      });
-    }
-
-    flutterTts.setErrorHandler((msg) {
-//      setState(() {
-      print("error: $msg");
-      ttsState = TtsState.stopped;
-//      });
-    });
-//    _speak("Knee Exercise");
+  }
+  Future<int> _loadStartSound() async {
+    var asset = await rootBundle.load("sounds/start_rec.mp3");
+    return await _soundpool.load(asset);
   }
 
-  Future _getLanguages() async {
-    languages = await flutterTts.getLanguages;
-    print(languages);
-    if (languages != null) setState(() => languages);
+  Future<void> _playStartSound() async {
+    var _alarmSound =  await _startSoundId;
+    print(_alarmSound);
+    _soundpool.play(_alarmSound);
   }
 
-  Future _speak(String voiceText) async {
-    cancelListening();
-
-//    stopListening();
-    await flutterTts.setVolume(volume);
-    await flutterTts.setSpeechRate(rate);
-    await flutterTts.setPitch(pitch);
-
-    if (voiceText != null) {
-      if (voiceText.isNotEmpty) {
-        var result = await flutterTts.speak(voiceText);
-        if (result == 1) {
-          ttsState = TtsState.playing;
-        }
-      }
-    }
+  Future<int> _loadStopSound() async {
+    var asset = await rootBundle.load("sounds/stop_rec.mp3");
+    return await _soundpool.load(asset);
   }
+
+  Future<void> _playStopSound() async {
+    var _alarmSound =  await _stopSoundId;
+    print(_alarmSound);
+    await _soundpool.play(_alarmSound);
+  }
+
+  Future<int> _loadExerciseSound() async {
+    var asset = await rootBundle.load("sounds/exercise_rep.mp3");
+    return await _soundpool.load(asset);
+  }
+
+  Future<void> _playExerciseSound() async {
+    var _alarmSound =  await _exerciseSoundId;
+    print(_alarmSound);
+    await _soundpool.play(_alarmSound);
+  }
+
 
 
 }
