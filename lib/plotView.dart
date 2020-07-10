@@ -360,7 +360,17 @@ class _PlotViewState extends State<PlotView> {
               seriesList,
               animate: true,
               defaultRenderer: new charts.LineRendererConfig(includePoints: true),
-              behaviors: [charts.SeriesLegend(),],
+              behaviors: [
+                charts.SeriesLegend(),
+                charts.ChartTitle('Angle (deg)',
+                    behaviorPosition: charts.BehaviorPosition.bottom,
+                    titleOutsideJustification:
+                    charts.OutsideJustification.middleDrawArea),
+                charts.ChartTitle('Time (s)',
+                    behaviorPosition: charts.BehaviorPosition.start,
+                    titleOutsideJustification:
+                    charts.OutsideJustification.middleDrawArea),
+              ],
 //        behaviors: [charts.SeriesLegend(), charts.PanAndZoomBehavior()],
 
               primaryMeasureAxis: charts.NumericAxisSpec(
