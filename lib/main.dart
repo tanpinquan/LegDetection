@@ -8,7 +8,7 @@ import 'package:wikitude_flutter_app/arm_tracking_view.dart';
 import 'package:wikitude_flutter_app/plotView.dart';
 //import 'package:wikitude_flutter_app/customUrl.dart';
 
-import 'arview.dart';
+import 'leg_tracking_view.dart';
 import 'category.dart';
 import 'custom_expansion_tile.dart';
 import 'sample.dart';
@@ -193,7 +193,7 @@ class MyAppState extends State<MainMenu> {
     else if(stringList.isEmpty){
       string = 'Say something...';
     }else if(stringList.length<3){
-      string = stringList.last.toLowerCase();
+      string = stringList.join(" ").toLowerCase();
     }else{
       string = stringList.sublist(stringList.length-3).join(" ");
     }
